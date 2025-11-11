@@ -31,8 +31,8 @@ export default function LoginPage() {
       const success = await login(formData.email, formData.password);
       
       if (success) {
-        // Connexion réussie
-        router.push('/dashboard');
+        // Connexion réussie - Redirection vers 2FA
+        router.push('/2fa');
       } else {
         setError('Email ou mot de passe incorrect');
       }

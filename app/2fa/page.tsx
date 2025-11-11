@@ -3,23 +3,39 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Shield, ArrowRight, RefreshCw, CheckCircle2 } from 'lucide-react';
+import { Shield, ArrowRight, RefreshCw, CheckCircle2, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ModernBackground from '@/components/ModernBackground';
 import FloatingParticles from '@/components/FloatingParticles';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function TwoFactorAuthPage() {
   const router = useRouter();
+  const { user } = useAuth();
   const [code, setCode] = useState<string[]>(['', '', '', '', '', '']);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  // Focus first input on mount
+  // Simuler l'envoi d'email au chargement
   useEffect(() => {
+    // Rediriger si pas connecté
+    if (!user) {
+      router.push('/login');
+      return;
+    }
+
+    // Simuler l'envoi d'email
+    setTimeout(() => {
+      setEmailSent(true);
+      console.log('📧 Code 2FA envoyé à:', user.email);
+      console.log('🔑 Code de test: 123456');
+    }, 500);
+
     inputRefs.current[0]?.focus();
-  }, []);
+  }, [user, router]);
 
   const handleChange = (index: number, value: string) => {
     // Only allow numbers
@@ -66,10 +82,14 @@ export default function TwoFactorAuthPage() {
     setCode(['', '', '', '', '', '']);
     setError('');
     setSuccess(false);
+    setEmailSent(false);
     inputRefs.current[0]?.focus();
     
-    // Simulate sending code
-    alert('Un nouveau code a été envoyé à votre adresse email !');
+    // Simuler l'envoi d'email
+    setTimeout(() => {
+      setEmailSent(true);
+      alert(`📧 Un nouveau code a été envoyé à ${user?.email} !\n\n🔑 Code de test: 123456`);
+    }, 500);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -135,8 +155,24 @@ export default function TwoFactorAuthPage() {
             <br />
             <span className="bg-gradient-to-r from-[#60A5FA] to-[#A78BFA] bg-clip-text text-transparent">Deux Facteurs</span>
           </h1>
+          
+          {emailSent ? (
+            <div className="mb-8 p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center gap-3">
+              <Mail className="w-5 h-5 text-blue-400 flex-shrink-0" />
+              <div className="text-sm">
+                <p className="text-blue-400 font-medium">Code envoyé avec succès !</p>
+                <p className="text-gray-400">Vérifiez votre boîte mail : <span className="text-white font-mono">{user?.email}</span></p>
+              </div>
+            </div>
+          ) : (
+            <div className="mb-8 flex items-center justify-center gap-2 text-gray-400">
+              <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-400 border-t-transparent"></div>
+              <span className="text-sm">Envoi du code en cours...</span>
+            </div>
+          )}
+          
           <p className="text-center text-gray-400 mb-8">
-            Entrez le code à 6 chiffres envoyé à votre adresse email
+            Entrez le code à 6 chiffres pour continuer
           </p>
 
           {success && (

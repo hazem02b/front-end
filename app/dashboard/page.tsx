@@ -137,8 +137,11 @@ export default function DashboardPage() {
             
             <div className="hidden md:flex items-center gap-8">
               <Link href="/offres" className="text-gray-300 hover:text-white transition-colors">Offres</Link>
+              <Link href="/roadmaps" className="text-gray-300 hover:text-white transition-colors">Roadmaps</Link>
+              <Link href="/mentorship" className="text-gray-300 hover:text-white transition-colors">Mentorship</Link>
+              <Link href="/forum" className="text-gray-300 hover:text-white transition-colors">Forum</Link>
               <Link href="/dashboard" className="text-white font-medium">Dashboard</Link>
-              <Link href="/profile" className="text-gray-300 hover:text-white transition-colors">Profil</Link>
+              <Link href="/settings" className="text-gray-300 hover:text-white transition-colors">Paramètres</Link>
             </div>
 
             <div className="flex items-center gap-4">
