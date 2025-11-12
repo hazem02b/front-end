@@ -32,8 +32,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Charger l'utilisateur depuis localStorage au démarrage (sans appel API)
   useEffect(() => {
     const loadUser = async () => {
+      console.log('🔄 AuthContext: Démarrage loadUser...');
+      
       // Vérifier si le backend est disponible
       const backendAvailable = await checkBackendAvailable();
+      console.log('🌐 Backend disponible:', backendAvailable);
       
       if (!backendAvailable && DEMO_MODE.enabled) {
         console.log('🎭 MODE DÉMO ACTIVÉ (backend non disponible)');
@@ -41,10 +44,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         
         // Charger l'utilisateur démo si pas déjà authentifié
         const storedDemoAuth = localStorage.getItem('demoAuthenticated');
+        console.log('📦 demoAuthenticated dans localStorage:', storedDemoAuth);
+        
         if (storedDemoAuth === 'true') {
-          setUser(DEMO_MODE.demoUser);
+          const storedUser = localStorage.getItem('user');
+          const parsedUser = storedUser ? JSON.parse(storedUser) : DEMO_MODE.demoUser;
+          
+          setUser(parsedUser);
           setIsAuthenticated(true);
-          console.log('✅ Utilisateur démo chargé:', DEMO_MODE.demoUser.email);
+          console.log('✅ Utilisateur démo chargé:', parsedUser.email);
+        } else {
+          console.log('⚠️ Pas d\'utilisateur démo authentifié');
         }
         return;
       }

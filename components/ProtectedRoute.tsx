@@ -10,9 +10,12 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Donner 300ms pour que AuthContext se charge depuis localStorage
+    // Donner 1000ms pour que AuthContext se charge depuis localStorage
     const timer = setTimeout(() => {
       setIsLoading(false);
+      
+      console.log('🛡️ ProtectedRoute: Vérification après chargement');
+      console.log('📦 isAuthenticated:', isAuthenticated);
       
       if (!isAuthenticated) {
         console.log('🚫 ProtectedRoute: Non authentifié, redirection vers /login');
@@ -20,7 +23,7 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
       } else {
         console.log('✅ ProtectedRoute: Utilisateur authentifié');
       }
-    }, 300);
+    }, 1000); // Augmenté à 1000ms
 
     return () => clearTimeout(timer);
   }, [isAuthenticated, router]);

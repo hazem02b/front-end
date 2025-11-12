@@ -144,20 +144,28 @@ export default function TwoFactorAuthPage() {
           type: 'student' as const,
         };
         
+        console.log('🎭 Mode démo: Stockage des infos utilisateur...');
         localStorage.setItem('user', JSON.stringify(demoUserWithProfile));
         localStorage.setItem('isAuthenticated', 'true');
         localStorage.setItem('demoAuthenticated', 'true');
         localStorage.removeItem('pendingEmail');
         
         console.log('✅ Authentification 2FA démo réussie:', demoUserWithProfile);
+        console.log('📦 localStorage après 2FA:', {
+          user: localStorage.getItem('user'),
+          isAuthenticated: localStorage.getItem('isAuthenticated'),
+          demoAuthenticated: localStorage.getItem('demoAuthenticated')
+        });
         
         setSuccess(true);
         setLoading(false);
         
-        // Redirection vers le dashboard
+        // Redirection vers le dashboard avec rechargement complet
         setTimeout(() => {
+          console.log('🚀 Redirection vers /dashboard...');
+          // Forcer le rechargement complet pour recharger AuthContext
           window.location.href = '/dashboard';
-        }, 1000);
+        }, 1500);
         return;
       }
 
