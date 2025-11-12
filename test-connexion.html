@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Test de Connexion API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .test-box {
+            background: #2a2a2a;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #666;
+        }
+        .success { border-left-color: #4CAF50; }
+        .error { border-left-color: #f44336; }
+        .warning { border-left-color: #ff9800; }
+        button {
+            background: #2563EB;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 16px;
+        }
+        button:hover { background: #1d4ed8; }
+        #results { margin-top: 20px; }
+        .code {
+            background: #1a1a1a;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+        h1 { color: #2563EB; }
+        h2 { color: #60a5fa; margin-top: 30px; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test de Connexion API Flask</h1>
+    
+    <div class="test-box">
+        <h3>Instructions :</h3>
+        <ol>
+            <li>Assurez-vous que Flask tourne (fenêtre CMD ouverte)</li>
+            <li>Assurez-vous que Next.js tourne (fenêtre CMD ouverte)</li>
+            <li>Cliquez sur les boutons ci-dessous pour tester</li>
+        </ol>
+    </div>
+
+    <h2>Tests Automatiques</h2>
+    
+    <button onclick="testFlaskBasic()">1️⃣ Test Basique Flask</button>
+    <button onclick="testCORS()">2️⃣ Test CORS</button>
+    <button onclick="testWithToken()">3️⃣ Test avec Token</button>
+    <button onclick="testUpdate()">4️⃣ Test Mise à Jour Profil</button>
+    <button onclick="clearResults()">🗑️ Effacer</button>
+
+    <div id="results"></div>
+
+    <h2>Information Actuelle</h2>
+    <div class="test-box">
+        <p><strong>URL API:</strong> <span id="apiUrl"></span></p>
+        <p><strong>Token:</strong> <span id="tokenStatus"></span></p>
+        <p><strong>Page actuelle:</strong> <span id="currentUrl"></span></p>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000';
+        const results = document.getElementById('results');
+
+        // Afficher les infos
+        document.getElementById('apiUrl').textContent = API_URL;
+        document.getElementById('currentUrl').textContent = window.location.href;
+        
+        const token = localStorage.getItem('accessToken');
+        document.getElementById('tokenStatus').textContent = token ? 
+            '✅ Présent (' + token.substring(0, 20) + '...)' : 
+            '❌ Absent (vous devez vous connecter)';
+
+        function addResult(title, message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `test-box ${type}`;
+            div.innerHTML = `
+                <h3>${title}</h3>
+                <div>${message}</div>
+            `;
+            results.insertBefore(div, results.firstChild);
+        }
+
+        function clearResults() {
+            results.innerHTML = '';
+        }
+
+        async function testFlaskBasic() {
+            addResult('🔄 Test en cours...', 'Test de base de Flask', 'warning');
+            
+            try {
+                const response = await fetch(`${API_URL}/api/register`, {
+                    method: 'OPTIONS',
+                    headers: {
+                        'Origin': window.location.origin
+                    }
+                });
+                
+                addResult(
+                    '✅ Test Basique Réussi', 
+                    `Flask répond correctement<br>Status: ${response.status}<br>CORS: ${response.headers.get('Access-Control-Allow-Origin')}`,
+                    'success'
+                );
+            } catch (error) {
+                addResult(
+                    '❌ Test Basique Échoué',
+                    `Erreur: ${error.message}<br><br>
+                    <strong>Solutions possibles:</strong><br>
+                    1. Flask n'est pas démarré → Lancez Flask<br>
+                    2. Flask est sur le mauvais port → Vérifiez qu'il écoute sur 5000<br>
+                    3. Pare-feu bloque → Autorisez Python dans le pare-feu`,
+                    'error'
+                );
+            }
+        }
+
+        async function testCORS() {
+            addResult('🔄 Test en cours...', 'Test de configuration CORS', 'warning');
+            
+            try {
+                const response = await fetch(`${API_URL}/api/users/me`, {
+                    method: 'OPTIONS',
+                    headers: {
+                        'Origin': window.location.origin,
+                        'Access-Control-Request-Method': 'GET',
+                        'Access-Control-Request-Headers': 'Authorization'
+                    }
+                });
+                
+                const allowOrigin = response.headers.get('Access-Control-Allow-Origin');
+                const allowMethods = response.headers.get('Access-Control-Allow-Methods');
+                const allowHeaders = response.headers.get('Access-Control-Allow-Headers');
+                
+                addResult(
+                    '✅ CORS Configuré',
+                    `<div class="code">
+                        Allow-Origin: ${allowOrigin}<br>
+                        Allow-Methods: ${allowMethods}<br>
+                        Allow-Headers: ${allowHeaders}
+                    </div>`,
+                    'success'
+                );
+            } catch (error) {
+                addResult(
+                    '❌ Erreur CORS',
+                    `${error.message}<br><br>CORS n'est peut-être pas configuré correctement`,
+                    'error'
+                );
+            }
+        }
+
+        async function testWithToken() {
+            const token = localStorage.getItem('accessToken');
+            
+            if (!token) {
+                addResult(
+                    '⚠️ Pas de Token',
+                    'Vous devez vous connecter d\'abord sur <a href="http://localhost:3000/login" style="color: #60a5fa">http://localhost:3000/login</a>',
+                    'warning'
+                );
+                return;
+            }
+
+            addResult('🔄 Test en cours...', 'Test avec authentification', 'warning');
+
+            try {
+                const response = await fetch(`${API_URL}/api/users/me`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    addResult(
+                        '✅ Authentification Réussie',
+                        `<div class="code">
+                            Email: ${data.user.email}<br>
+                            Nom: ${data.user.name}<br>
+                            Téléphone: ${data.user.phone || 'Non renseigné'}<br>
+                            ID: ${data.user.id}
+                        </div>`,
+                        'success'
+                    );
+                } else {
+                    addResult(
+                        '❌ Erreur d\'Authentification',
+                        `Status: ${response.status}<br>Message: ${data.error || 'Erreur inconnue'}<br><br>
+                        Votre token est peut-être expiré. Reconnectez-vous.`,
+                        'error'
+                    );
+                }
+            } catch (error) {
+                addResult(
+                    '❌ Erreur de Connexion',
+                    `${error.message}<br><br>
+                    <strong>Causes possibles:</strong><br>
+                    1. Flask est arrêté<br>
+                    2. Problème réseau<br>
+                    3. Pare-feu bloque la connexion`,
+                    'error'
+                );
+            }
+        }
+
+        async function testUpdate() {
+            const token = localStorage.getItem('accessToken');
+            
+            if (!token) {
+                addResult(
+                    '⚠️ Pas de Token',
+                    'Vous devez vous connecter d\'abord',
+                    'warning'
+                );
+                return;
+            }
+
+            addResult('🔄 Test en cours...', 'Test de mise à jour du profil', 'warning');
+
+            const testPhone = '+216 98 ' + Math.floor(Math.random() * 1000000);
+
+            try {
+                const response = await fetch(`${API_URL}/api/users/me`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        phone: testPhone
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    addResult(
+                        '✅ Mise à Jour Réussie !',
+                        `<div class="code">
+                            Nouveau téléphone: ${data.user.phone}<br>
+                            Email: ${data.user.email}<br>
+                            Nom: ${data.user.name}
+                        </div>
+                        <br>
+                        <strong style="color: #4CAF50">
+                            ✅ TOUT FONCTIONNE ! Vous pouvez maintenant mettre à jour votre profil depuis le site.
+                        </strong>`,
+                        'success'
+                    );
+                } else {
+                    addResult(
+                        '❌ Échec de la Mise à Jour',
+                        `Status: ${response.status}<br>
+                        Erreur: ${data.error || 'Erreur inconnue'}<br><br>
+                        <div class="code">${JSON.stringify(data, null, 2)}</div>`,
+                        'error'
+                    );
+                }
+            } catch (error) {
+                addResult(
+                    '❌ Erreur de Connexion',
+                    `${error.message}<br><br>
+                    <strong>C'est cette erreur que vous voyez sur le site !</strong><br><br>
+                    Solutions:<br>
+                    1. Vérifiez que Flask tourne (fenêtre CMD ouverte)<br>
+                    2. Vérifiez que Flask écoute sur le bon port (5000)<br>
+                    3. Redémarrez Flask si nécessaire`,
+                    'error'
+                );
+            }
+        }
+
+        // Test automatique au chargement
+        window.addEventListener('load', () => {
+            addResult(
+                '📋 Page de Test Chargée',
+                'Cliquez sur les boutons ci-dessus pour tester la connexion',
+                'success'
+            );
+        });
+    </script>
+</body>
+</html>

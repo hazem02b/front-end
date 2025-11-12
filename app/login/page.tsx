@@ -1,17 +1,19 @@
 "use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowRight, Mail, Lock, Eye, EyeOff, Github, Chrome } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ModernBackground from '@/components/ModernBackground';
 import FloatingParticles from '@/components/FloatingParticles';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import { API_ENDPOINTS } from '@/lib/api-config';
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -21,6 +23,20 @@ export default function LoginPage() {
   
   const { login } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Vérifier si on vient de s'inscrire
+  useEffect(() => {
+    const registered = searchParams.get('registered');
+    const email = searchParams.get('email');
+    
+    if (registered === 'true') {
+      setSuccess('✅ Inscription réussie ! Vous pouvez maintenant vous connecter.');
+      if (email) {
+        setFormData(prev => ({ ...prev, email: decodeURIComponent(email) }));
+      }
+    }
+  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,16 +44,32 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const success = await login(formData.email, formData.password);
-      
-      if (success) {
-        // Connexion réussie - Redirection vers 2FA
-        router.push('/2fa');
-      } else {
-        setError('Email ou mot de passe incorrect');
+      // Appel API backend pour connexion
+      const response = await fetch(API_ENDPOINTS.login, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error || 'Email ou mot de passe incorrect');
+        return;
       }
-    } catch (err) {
-      setError('Une erreur est survenue');
+
+      // Stocker l'email pour la page 2FA
+      localStorage.setItem('pendingEmail', formData.email);
+      
+      // Redirection vers 2FA
+      router.push('/2fa');
+    } catch (err: any) {
+      setError(err.message || 'Une erreur est survenue');
     } finally {
       setLoading(false);
     }
@@ -119,6 +151,12 @@ export default function LoginPage() {
 
             {/* Email/Password Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
+              {success && (
+                <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-xl text-green-400 text-sm">
+                  {success}
+                </div>
+              )}
+              
               {error && (
                 <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm">
                   {error}

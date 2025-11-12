@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from 'react';
-import { Search, MapPin, Briefcase, Clock, Euro, Filter, Star, TrendingUp, Building, ChevronRight } from 'lucide-react';
+import { Search, MapPin, Briefcase, Clock, Euro, Filter, Star, TrendingUp, Building, ChevronRight, Bell, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ModernBackground from '@/components/ModernBackground';
 import FloatingParticles from '@/components/FloatingParticles';
 import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
 
 const MOCK_OFFERS = [
   {
@@ -89,6 +90,7 @@ const MOCK_OFFERS = [
 ];
 
 export default function OffersPage() {
+  const { user, isAuthenticated } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLocation, setSelectedLocation] = useState('all');
 
@@ -122,25 +124,41 @@ export default function OffersPage() {
             <div className="hidden md:flex items-center gap-8">
               <Link href="/offres" className="text-white font-medium">Offres</Link>
               <Link href="/dashboard" className="text-gray-300 hover:text-white transition-colors">Dashboard</Link>
-              <Link href="/profile" className="text-gray-300 hover:text-white transition-colors">Profil</Link>
+              <Link href="/settings" className="text-gray-300 hover:text-white transition-colors">Paramètres</Link>
             </div>
 
             <div className="flex items-center gap-4">
-              <Link href="/login">
-                <Button 
-                  variant="ghost" 
-                  className="text-white hover:bg-white/10 hover:text-white border-none"
-                >
-                  Connexion
-                </Button>
-              </Link>
-              <Link href="/register">
-                <Button 
-                  className="bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[#2563EB] text-white border-none shadow-lg shadow-[#2563EB]/50"
-                >
-                  Commencer
-                </Button>
-              </Link>
+              {isAuthenticated ? (
+                <>
+                  <button className="relative p-2 rounded-xl hover:bg-white/10 transition-colors">
+                    <Bell className="w-6 h-6 text-gray-300" />
+                    <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                  </button>
+                  <Link href="/settings">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#2563EB] to-[#7C3AED] flex items-center justify-center text-white font-semibold cursor-pointer hover:shadow-lg transition-shadow">
+                      {user?.name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U'}
+                    </div>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link href="/login">
+                    <Button 
+                      variant="ghost" 
+                      className="text-white hover:bg-white/10 hover:text-white border-none"
+                    >
+                      Connexion
+                    </Button>
+                  </Link>
+                  <Link href="/register">
+                    <Button 
+                      className="bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[#2563EB] text-white border-none shadow-lg shadow-[#2563EB]/50"
+                    >
+                      Commencer
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>

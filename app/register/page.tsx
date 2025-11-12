@@ -8,6 +8,7 @@ import ModernBackground from '@/components/ModernBackground';
 import FloatingParticles from '@/components/FloatingParticles';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import { API_ENDPOINTS } from '@/lib/api-config';
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -34,29 +35,39 @@ export default function RegisterPage() {
       return;
     }
     
-    if (formData.password.length < 6) {
-      setError('Le mot de passe doit contenir au moins 6 caractères');
+    if (formData.password.length < 8) {
+      setError('Le mot de passe doit contenir au moins 8 caractères');
       return;
     }
     
     setLoading(true);
 
     try {
-      const success = await register(
-        formData.email, 
-        formData.password, 
-        formData.fullName, 
-        accountType
-      );
-      
-      if (success) {
-        // Inscription réussie
-        router.push('/dashboard');
-      } else {
-        setError('Cet email est déjà utilisé');
+      // Appel API backend pour inscription
+      const response = await fetch(API_ENDPOINTS.register, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+          name: formData.fullName,
+          type: accountType === 'student' ? 'STUDENT' : 'COMPANY',
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error || 'Une erreur est survenue lors de l\'inscription');
+        return;
       }
-    } catch (err) {
-      setError('Une erreur est survenue');
+
+      // Inscription réussie - Rediriger vers login avec message de succès
+      router.push('/login?registered=true&email=' + encodeURIComponent(formData.email));
+    } catch (err: any) {
+      setError(err.message || 'Une erreur est survenue');
     } finally {
       setLoading(false);
     }

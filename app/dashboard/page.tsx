@@ -334,7 +334,7 @@ export default function DashboardPage() {
                 ))}
               </div>
 
-              <Link href="/profile">
+              <Link href="/settings">
                 <Button className="w-full mt-6 bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[#2563EB] text-white border-none">
                   Compléter mon profil
                 </Button>

@@ -2,10 +2,11 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { BookOpen, CheckCircle2, Circle, Lock, ArrowRight, Clock, Star, Award, TrendingUp } from 'lucide-react';
+import { BookOpen, CheckCircle2, Circle, Lock, ArrowRight, Clock, Star, Award, TrendingUp, Bell, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ModernBackground from '@/components/ModernBackground';
 import FloatingParticles from '@/components/FloatingParticles';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface RoadmapStep {
   id: number;
@@ -182,6 +183,7 @@ const ROADMAPS: Roadmap[] = [
 ];
 
 export default function RoadmapsPage() {
+  const { user, isAuthenticated } = useAuth();
   const [selectedRoadmap, setSelectedRoadmap] = useState<string | null>(null);
 
   const currentRoadmap = selectedRoadmap 
@@ -216,14 +218,39 @@ export default function RoadmapsPage() {
               <Link href="/mentorship" className="text-gray-300 hover:text-white transition-colors">Mentorship</Link>
             </div>
 
-            <Link href="/profile">
-              <Button 
-                variant="ghost" 
-                className="text-white hover:bg-white/10 hover:text-white border-none"
-              >
-                Mon Profil
-              </Button>
-            </Link>
+            <div className="flex items-center gap-4">
+              {isAuthenticated ? (
+                <>
+                  <button className="relative p-2 rounded-xl hover:bg-white/10 transition-colors">
+                    <Bell className="w-6 h-6 text-gray-300" />
+                    <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                  </button>
+                  <Link href="/settings">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#2563EB] to-[#7C3AED] flex items-center justify-center text-white font-semibold cursor-pointer hover:shadow-lg transition-shadow">
+                      {user?.name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U'}
+                    </div>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link href="/login">
+                    <Button 
+                      variant="ghost" 
+                      className="text-white hover:bg-white/10 hover:text-white border-none"
+                    >
+                      Connexion
+                    </Button>
+                  </Link>
+                  <Link href="/register">
+                    <Button 
+                      className="bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[#2563EB] text-white border-none shadow-lg shadow-[#2563EB]/50"
+                    >
+                      Commencer
+                    </Button>
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </nav>
