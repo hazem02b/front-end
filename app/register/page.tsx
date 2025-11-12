@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowRight, Mail, Lock, User, Eye, EyeOff, Github, Chrome, GraduationCap, Briefcase } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -9,6 +9,7 @@ import FloatingParticles from '@/components/FloatingParticles';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { API_ENDPOINTS } from '@/lib/api-config';
+import { DEMO_MODE, checkBackendAvailable } from '@/lib/demo-config';
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -16,6 +17,7 @@ export default function RegisterPage() {
   const [accountType, setAccountType] = useState<'student' | 'company'>('student');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isDemoMode, setIsDemoMode] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -25,6 +27,15 @@ export default function RegisterPage() {
   
   const { register } = useAuth();
   const router = useRouter();
+
+  // Vérifier si le backend est disponible
+  useEffect(() => {
+    const checkMode = async () => {
+      const backendAvailable = await checkBackendAvailable();
+      setIsDemoMode(!backendAvailable && DEMO_MODE.enabled);
+    };
+    checkMode();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,7 +54,25 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      // Appel API backend pour inscription
+      // MODE DÉMO : Inscription directe sans API
+      if (isDemoMode) {
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Simuler délai
+        const success = await register(
+          formData.email || 'demo@forstek.tn',
+          formData.password || 'demo',
+          formData.fullName || 'Utilisateur Démo',
+          accountType
+        );
+        if (success) {
+          // Rediriger vers dashboard directement en mode démo
+          router.push('/dashboard');
+        } else {
+          setError('Erreur d\'inscription en mode démo');
+        }
+        return;
+      }
+
+      // MODE NORMAL : Appel API backend pour inscription
       const response = await fetch(API_ENDPOINTS.register, {
         method: 'POST',
         headers: {
@@ -67,7 +96,13 @@ export default function RegisterPage() {
       // Inscription réussie - Rediriger vers login avec message de succès
       router.push('/login?registered=true&email=' + encodeURIComponent(formData.email));
     } catch (err: any) {
-      setError(err.message || 'Une erreur est survenue');
+      // En cas d'erreur réseau, basculer en mode démo
+      if (err.message.includes('fetch') || err.message.includes('Failed to fetch')) {
+        setIsDemoMode(true);
+        setError('🎭 Backend non disponible. Mode démo activé ! Cliquez sur "S\'inscrire" pour continuer.');
+      } else {
+        setError(err.message || 'Une erreur est survenue');
+      }
     } finally {
       setLoading(false);
     }
