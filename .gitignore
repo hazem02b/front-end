@@ -64,6 +64,13 @@ backend-flask/uploads/
 public/uploads/*
 !public/uploads/.gitkeep
 
-# Documentation temporaire
-*.md
-!README.md
+# Documentation temporaire (fichiers de debug seulement)
+BACKEND_*.md
+CORRECTION_*.md
+DIAGNOSTIC_*.md
+ETAPES_*.md
+FONCTIONNALITES_*.md
+GUIDE_*.md
+SOLUTION_*.md
+SETUP_*.md
+TROUVER_*.md
