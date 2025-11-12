@@ -1,305 +1,607 @@
-# 🎓 Forstek - Plateforme de Stages en Tunisie# 🎓 Forstek - Plateforme de Stages pour Étudiants Tunisiens
+# 🎓 Forstek - Frontend (Next.js)# 🎓 Forstek - Plateforme de Stages en Tunisie# 🎓 Forstek - Plateforme de Stages pour Étudiants Tunisiens
 
 
 
-Plateforme web complète pour connecter étudiants et entreprises tunisiennes, avec système d'authentification 2FA, gestion de profils, et recherche de stages.Plateforme web moderne connectant les étudiants tunisiens avec des opportunités de stages et de mentorat.
+[![Next.js](https://img.shields.io/badge/Next.js-14-black?style=flat&logo=next.js)](https://nextjs.org/)
+
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat&logo=typescript)](https://www.typescriptlang.org/)
+
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8?style=flat&logo=tailwind-css)](https://tailwindcss.com/)Plateforme web complète pour connecter étudiants et entreprises tunisiennes, avec système d'authentification 2FA, gestion de profils, et recherche de stages.Plateforme web moderne connectant les étudiants tunisiens avec des opportunités de stages et de mentorat.
 
 
 
-## 📋 Table des matières## ✨ Fonctionnalités
+Plateforme web moderne connectant les étudiants tunisiens avec des opportunités de stages, roadmaps d'apprentissage, et mentorat.
 
 
 
-- [Technologies](#technologies)- 🏠 **Page d'accueil** : Présentation de la plateforme
+> 📦 **Note** : Ce repo contient uniquement le frontend. Pour le backend Flask, voir [front-back-forstek](https://github.com/hazem02b/front-back-forstek).## 📋 Table des matières## ✨ Fonctionnalités
 
-- [Fonctionnalités](#fonctionnalités)- 🔐 **Authentification** : Connexion et inscription (Étudiant/Entreprise)
 
-- [Installation](#installation)- 💼 **Offres de stage** : Recherche et filtrage d'opportunités
 
-- [Configuration](#configuration)- 📊 **Dashboard** : Suivi des candidatures et statistiques
+---
 
-- [Démarrage](#démarrage)- 👤 **Profil** : Gestion du profil et compétences
+
+
+## ✨ Fonctionnalités- [Technologies](#technologies)- 🏠 **Page d'accueil** : Présentation de la plateforme
+
+
+
+### Pages et Navigation- [Fonctionnalités](#fonctionnalités)- 🔐 **Authentification** : Connexion et inscription (Étudiant/Entreprise)
+
+- 🏠 **Page d'accueil** : Présentation de la plateforme avec design moderne
+
+- 💼 **Offres de stage** : Recherche et filtrage d'opportunités- [Installation](#installation)- 💼 **Offres de stage** : Recherche et filtrage d'opportunités
+
+- 🗺️ **Roadmaps** : Parcours d'apprentissage guidés
+
+- 🎯 **Mentorat** : Connexion avec des mentors professionnels- [Configuration](#configuration)- 📊 **Dashboard** : Suivi des candidatures et statistiques
+
+- 💬 **Forum** : Discussions communautaires
+
+- ℹ️ **À propos** : Histoire et équipe de Forstek- [Démarrage](#démarrage)- 👤 **Profil** : Gestion du profil et compétences
+
+- 📞 **Contact** : Formulaire de contact
 
 - [Structure du projet](#structure-du-projet)- 💬 **Forum** : Discussions communautaires
 
-- [API Endpoints](#api-endpoints)- 🎯 **Mentorat** : Connexion avec des mentors professionnels
+### Authentification et Profil
 
-- ℹ️ **À propos** : Histoire et équipe de Forstek
+- 🔐 **Connexion/Inscription** : Interface moderne avec choix du type de compte (Étudiant/Entreprise)- [API Endpoints](#api-endpoints)- 🎯 **Mentorat** : Connexion avec des mentors professionnels
 
-## 🚀 Technologies- 📞 **Contact** : Formulaire de contact et informations
+- 🔑 **2FA** : Page de vérification du code à deux facteurs
+
+- 📊 **Dashboard** : Tableau de bord personnalisé- ℹ️ **À propos** : Histoire et équipe de Forstek
+
+- 👤 **Profil** : Gestion complète du profil (bio, formation, compétences, liens sociaux)
+
+- ⚙️ **Paramètres** : Modification des informations personnelles et upload de CV## 🚀 Technologies- 📞 **Contact** : Formulaire de contact et informations
 
 
 
-### Frontend## 🚀 Installation Rapide
+### UI/UX
 
-- **Next.js 14** - Framework React avec App Router
+- ✨ Design moderne avec animations Framer Motion
+
+- 🎨 Dégradés et effets glassmorphism### Frontend## 🚀 Installation Rapide
+
+- 📱 Responsive design (mobile-first)
+
+- 🔔 Navigation conditionnelle selon l'authentification- **Next.js 14** - Framework React avec App Router
+
+- 🛡️ Protection des routes privées
 
 - **TypeScript** - Typage statique### 1️⃣ Cloner le repository
 
+---
+
 - **Tailwind CSS** - Styling moderne```bash
+
+## 🚀 Technologies
 
 - **Lucide React** - Icônesgit clone https://github.com/hazem02b/front-end.git
 
-cd front-end
+- **Next.js 14** - Framework React avec App Router
 
-### Backend```
+- **TypeScript** - Typage statique pour plus de sécuritécd front-end
 
-- **Flask** - Framework Python léger
+- **Tailwind CSS v4** - Framework CSS utility-first
 
-- **SQLAlchemy** - ORM pour la base de données### 2️⃣ Installer les dépendances
+- **Lucide React** - Bibliothèque d'icônes modernes### Backend```
 
-- **SQLite** - Base de données```bash
+- **Framer Motion** - Animations fluides
 
-- **JWT** - Authentification par tokensnpm install
-
-- **Bcrypt** - Hashage des mots de passe```
-
-- **2FA** - Authentification à deux facteurs⚠️ **IMPORTANT** : Cette étape est OBLIGATOIRE après chaque clonage !
+- **Radix UI** - Composants accessibles- **Flask** - Framework Python léger
 
 
 
-## ✨ Fonctionnalités### 3️⃣ Lancer le serveur
+---- **SQLAlchemy** - ORM pour la base de données### 2️⃣ Installer les dépendances
+
+
+
+## 📦 Installation- **SQLite** - Base de données```bash
+
+
+
+### Prérequis- **JWT** - Authentification par tokensnpm install
+
+- Node.js 18+ et npm
+
+- Git- **Bcrypt** - Hashage des mots de passe```
+
+
+
+### 1. Cloner le repository- **2FA** - Authentification à deux facteurs⚠️ **IMPORTANT** : Cette étape est OBLIGATOIRE après chaque clonage !
+
+
 
 ```bash
+
+git clone https://github.com/hazem02b/front-end.git
+
+cd front-end## ✨ Fonctionnalités### 3️⃣ Lancer le serveur
+
+```
+
+```bash
+
+### 2. Installer les dépendances
 
 ### Authentificationnpm run dev
 
-- ✅ Inscription avec validation (email, mot de passe, type de compte)```
+```bash
+
+npm install- ✅ Inscription avec validation (email, mot de passe, type de compte)```
+
+```
 
 - ✅ Connexion avec authentification 2FA
 
+> ⚠️ **Important** : Cette étape est essentielle ! Le dossier `node_modules` (~500 MB) n'est pas inclus dans Git et doit être généré localement.
+
 - ✅ Codes 2FA envoyés par email (Brevo SMTP)### 4️⃣ Ouvrir dans le navigateur
+
+### 3. Configurer l'API backend (optionnel)
 
 - ✅ Tokens JWT avec expiration 24hVisitez : **http://localhost:3000**
 
+Si vous avez un backend Flask, modifiez `lib/api-config.ts` :
+
 - ✅ Protection des routes privées
 
-- ✅ Gestion de session avec localStorage
+```typescript
+
+export const API_BASE_URL = 'http://localhost:5000'; // URL de votre backend- ✅ Gestion de session avec localStorage
+
+```
 
 
+
+---
 
 ### Profils Utilisateurs## 🛠️ Technologies
 
+## 🎯 Démarrage
+
 - ✅ Profil étudiant complet (bio, formation, compétences)
+
+### Développement
 
 - ✅ Profil entreprise- **Next.js 16** (App Router + Turbopack)
 
-- ✅ Modification en temps réel- **TypeScript**
+```bash
+
+npm run dev- ✅ Modification en temps réel- **TypeScript**
+
+```
 
 - ✅ Upload de CV (PDF)- **Tailwind CSS v4**
 
+Le site sera accessible sur **http://localhost:3000**
+
 - ✅ Liens sociaux (LinkedIn, GitHub, Website)- **Lucide React** (Icônes)
+
+### Production
 
 - **Framer Motion** (Animations)
 
-### Interface- **Radix UI** (Composants accessibles)
+```bash
+
+# Build### Interface- **Radix UI** (Composants accessibles)
+
+npm run build
 
 - ✅ Design moderne avec animations
 
-- ✅ Navigation conditionnelle selon authentification## 📁 Structure du Projet
+# Démarrer
+
+npm start- ✅ Navigation conditionnelle selon authentification## 📁 Structure du Projet
+
+```
 
 - ✅ Dashboard personnalisé
 
+---
+
 - ✅ Page paramètres unifiée```
-
-- ✅ Responsive designfront-end/
-
-├── app/                    # Pages (Next.js App Router)
-
-## 📦 Installation│   ├── page.tsx           # Accueil
-
-│   ├── login/             # Connexion
-
-### Prérequis│   ├── register/          # Inscription
-
-- Node.js 18+ et npm│   ├── offres/            # Offres de stage
-
-- Python 3.10+│   ├── dashboard/         # Tableau de bord
-
-- Git│   ├── profile/           # Profil
-
-│   ├── forum/             # Forum
-
-### 1. Cloner le projet│   ├── mentorship/        # Mentorat
-
-│   ├── about/             # À propos
-
-```bash│   └── contact/           # Contact
-
-git clone https://github.com/hazem02b/front-back-forstek.git├── components/            # Composants réutilisables
-
-cd front-back-forstek│   ├── Navbar.tsx
-
-```│   ├── ModernBackground.tsx
-
-│   └── ui/                # Composants UI
-
-### 2. Installation Frontend└── public/                # Assets statiques
-
-```
-
-```bash
-
-npm install## 📝 Commandes Disponibles
-
-```
-
-| Commande | Description |
-
-### 3. Installation Backend|----------|-------------|
-
-| `npm run dev` | Serveur de développement |
-
-```bash| `npm run build` | Build de production |
-
-cd backend-flask| `npm start` | Lancer la production |
-
-python -m venv .venv| `npm run lint` | Vérifier le code |
-
-
-
-# Windows## ⚠️ Pourquoi `npm install` est nécessaire ?
-
-.\.venv\Scripts\activate
-
-Le dossier **`node_modules`** (contenant ~428 packages) n'est **PAS** inclus dans Git car :
-
-# Linux/Mac- Il pèse environ **500 MB**
-
-source .venv/bin/activate- Il est listé dans `.gitignore`
-
-- Il doit être généré localement via `npm install`
-
-pip install Flask Flask-Cors Flask-SQLAlchemy python-dotenv passlib PyJWT bcrypt
-
-```**Sans cette étape, le site ne fonctionnera pas !**
-
-
-
-## ⚙️ Configuration## 🐛 Problèmes Courants
-
-
-
-### Backend - Fichier `.env`### ❌ Le serveur ne démarre pas
-
-```bash
-
-Créez `backend-flask/.env` :# Solution 1 : Réinstaller les dépendances
-
-rm -rf node_modules package-lock.json
-
-```envnpm install
-
-# JWT Configuration
-
-JWT_SECRET=votre_secret_jwt_tres_long_et_complexe_ici# Solution 2 : Vérifier Node.js
-
-JWT_ALGORITHM=HS256node --version  # Doit être >= 18.0.0
-
-ACCESS_TOKEN_EXPIRES_MINUTES=1440```
-
-REFRESH_TOKEN_EXPIRES_DAYS=7
-
-### ❌ Port 3000 occupé
-
-# Email Configuration (Brevo SMTP)Next.js choisira automatiquement un port libre (3001, 3002...)
-
-EMAIL_HOST=smtp-relay.brevo.com
-
-EMAIL_PORT=587### ❌ Erreurs de compilation
-
-EMAIL_USER=votre_email@exemple.comAssurez-vous d'avoir bien exécuté `npm install`
-
-EMAIL_PASSWORD=votre_cle_api_brevo
-
-EMAIL_FROM=noreply@forstek.tn## 📖 Documentation Complète
-
-```
-
-Pour plus de détails, consultez [INSTALLATION.md](./INSTALLATION.md)
-
-### Frontend - Configuration API
-
-## 🔐 Configuration Git (pour les contributeurs)
-
-Le fichier `lib/api-config.ts` est déjà configuré pour pointer vers `http://localhost:5000/api`.
-
-```bash
-
-## 🎯 Démarragegit config user.name "Votre Nom"
-
-git config user.email "votre@email.com"
-
-### Option 1 : Démarrage automatique (Windows)```
-
-
-Double-cliquez sur `DEMARRER.bat` qui lance automatiquement :
-- Backend Flask sur port 5000
-- Frontend Next.js sur port 3000
-
-### Option 2 : Démarrage manuel
-
-**Terminal 1 - Backend :**
-```bash
-cd backend-flask
-.\.venv\Scripts\python.exe app.py
-```
-
-**Terminal 2 - Frontend :**
-```bash
-npm run dev
-```
-
-### Accès à l'application
-
-- **Frontend** : http://localhost:3000
-- **Backend API** : http://localhost:5000/api
 
 ## 📁 Structure du projet
 
-```
-front-back-forstek/
-├── app/                          # Pages Next.js (App Router)
-│   ├── register/                 # Page d'inscription
-│   ├── login/                    # Page de connexion
-│   ├── 2fa/                      # Vérification 2FA
-│   ├── dashboard/                # Dashboard utilisateur
-│   ├── settings/                 # Paramètres & profil
-│   ├── offres/                   # Offres de stage
-│   ├── roadmaps/                 # Roadmaps d'apprentissage
-│   ├── mentorship/               # Programme de mentorat
-│   └── forum/                    # Forum communautaire
-├── components/                   # Composants React
-│   ├── ProtectedRoute.tsx        # HOC pour routes protégées
-│   ├── CVUploader.tsx            # Upload de CV
-│   ├── ModernBackground.tsx      # Background animé
-│   └── FloatingParticles.tsx     # Particules flottantes
-├── contexts/                     # Contextes React
-│   └── AuthContext.tsx           # Gestion authentification
-├── lib/                          # Utilitaires
-│   └── api-config.ts             # Configuration API
-├── backend-flask/                # Backend Flask
-│   ├── app.py                    # Application Flask principale
-│   ├── models.py                 # Modèles SQLAlchemy
-│   ├── utils.py                  # Fonctions utilitaires
-│   ├── create_db.py              # Script création DB
-│   ├── .env                      # Variables d'environnement
-│   ├── instance/                 # Base de données SQLite
-│   └── uploads/cvs/              # CVs uploadés
-├── public/                       # Assets statiques
-├── .gitignore                    # Fichiers ignorés par Git
-├── package.json                  # Dépendances Node.js
-├── tailwind.config.ts            # Configuration Tailwind
-├── tsconfig.json                 # Configuration TypeScript
-└── README.md                     # Ce fichier
+- ✅ Responsive designfront-end/
+
 ```
 
-## 🔌 API Endpoints
+front-end/├── app/                    # Pages (Next.js App Router)
+
+├── app/                          # Pages Next.js (App Router)
+
+│   ├── page.tsx                  # Page d'accueil## 📦 Installation│   ├── page.tsx           # Accueil
+
+│   ├── login/                    # Page de connexion
+
+│   ├── register/                 # Page d'inscription│   ├── login/             # Connexion
+
+│   ├── 2fa/                      # Vérification 2FA
+
+│   ├── dashboard/                # Dashboard utilisateur### Prérequis│   ├── register/          # Inscription
+
+│   ├── settings/                 # Paramètres & profil
+
+│   ├── offres/                   # Offres de stage- Node.js 18+ et npm│   ├── offres/            # Offres de stage
+
+│   ├── roadmaps/                 # Roadmaps d'apprentissage
+
+│   ├── mentorship/               # Programme de mentorat- Python 3.10+│   ├── dashboard/         # Tableau de bord
+
+│   ├── forum/                    # Forum communautaire
+
+│   ├── about/                    # À propos- Git│   ├── profile/           # Profil
+
+│   └── contact/                  # Contact
+
+├── components/                   # Composants React réutilisables│   ├── forum/             # Forum
+
+│   ├── Navbar.tsx                # Navigation principale
+
+│   ├── ProtectedRoute.tsx        # HOC pour routes protégées### 1. Cloner le projet│   ├── mentorship/        # Mentorat
+
+│   ├── CVUploader.tsx            # Upload de CV
+
+│   ├── ModernBackground.tsx      # Background animé│   ├── about/             # À propos
+
+│   ├── FloatingParticles.tsx     # Particules flottantes
+
+│   └── ui/                       # Composants UI (Button, Card, etc.)```bash│   └── contact/           # Contact
+
+├── contexts/                     # Contextes React
+
+│   └── AuthContext.tsx           # Gestion de l'authentificationgit clone https://github.com/hazem02b/front-back-forstek.git├── components/            # Composants réutilisables
+
+├── lib/                          # Utilitaires
+
+│   └── api-config.ts             # Configuration de l'APIcd front-back-forstek│   ├── Navbar.tsx
+
+├── public/                       # Assets statiques
+
+├── styles/                       # Styles globaux```│   ├── ModernBackground.tsx
+
+├── .gitignore                    # Fichiers ignorés par Git
+
+├── package.json                  # Dépendances Node.js│   └── ui/                # Composants UI
+
+├── tailwind.config.ts            # Configuration Tailwind
+
+├── tsconfig.json                 # Configuration TypeScript### 2. Installation Frontend└── public/                # Assets statiques
+
+└── README.md                     # Ce fichier
+
+``````
+
+
+
+---```bash
+
+
+
+## 🔧 Configurationnpm install## 📝 Commandes Disponibles
+
+
+
+### Variables d'environnement (optionnel)```
+
+
+
+Créez un fichier `.env.local` pour les configurations locales :| Commande | Description |
+
+
+
+```env### 3. Installation Backend|----------|-------------|
+
+NEXT_PUBLIC_API_URL=http://localhost:5000
+
+```| `npm run dev` | Serveur de développement |
+
+
+
+---```bash| `npm run build` | Build de production |
+
+
+
+## 🛡️ Routes protégéescd backend-flask| `npm start` | Lancer la production |
+
+
+
+Certaines pages nécessitent une authentification :python -m venv .venv| `npm run lint` | Vérifier le code |
+
+- `/dashboard` - Tableau de bord
+
+- `/settings` - Paramètres du profil
+
+- `/profile` - Profil (redirige vers /settings)
+
+# Windows## ⚠️ Pourquoi `npm install` est nécessaire ?
+
+Le composant `ProtectedRoute` vérifie automatiquement :
+
+- Si l'utilisateur est connecté (token JWT dans localStorage).\.venv\Scripts\activate
+
+- Redirige vers `/login` si non authentifié
+
+Le dossier **`node_modules`** (contenant ~428 packages) n'est **PAS** inclus dans Git car :
+
+---
+
+# Linux/Mac- Il pèse environ **500 MB**
+
+## 📱 Responsive Design
+
+source .venv/bin/activate- Il est listé dans `.gitignore`
+
+Le site est optimisé pour tous les écrans :
+
+- 📱 Mobile (< 768px)- Il doit être généré localement via `npm install`
+
+- 📱 Tablette (768px - 1024px)
+
+- 🖥️ Desktop (> 1024px)pip install Flask Flask-Cors Flask-SQLAlchemy python-dotenv passlib PyJWT bcrypt
+
+
+
+---```**Sans cette étape, le site ne fonctionnera pas !**
+
+
+
+## 🎨 Personnalisation
+
+
+
+### Couleurs## ⚙️ Configuration## 🐛 Problèmes Courants
+
+
+
+Modifiez `tailwind.config.ts` pour changer le thème :
+
+
+
+```typescript### Backend - Fichier `.env`### ❌ Le serveur ne démarre pas
+
+theme: {
+
+  extend: {```bash
+
+    colors: {
+
+      primary: '#2563EB',    // Bleu principalCréez `backend-flask/.env` :# Solution 1 : Réinstaller les dépendances
+
+      secondary: '#7C3AED',  // Violet secondaire
+
+      // Ajoutez vos couleurs...rm -rf node_modules package-lock.json
+
+    }
+
+  }```envnpm install
+
+}
+
+```# JWT Configuration
+
+
+
+### PolicesJWT_SECRET=votre_secret_jwt_tres_long_et_complexe_ici# Solution 2 : Vérifier Node.js
+
+
+
+Les polices sont configurées dans `app/layout.tsx` :JWT_ALGORITHM=HS256node --version  # Doit être >= 18.0.0
+
+
+
+```typescriptACCESS_TOKEN_EXPIRES_MINUTES=1440```
+
+const inter = Inter({ subsets: ['latin'] })
+
+```REFRESH_TOKEN_EXPIRES_DAYS=7
+
+
+
+---### ❌ Port 3000 occupé
+
+
+
+## 🐛 Problèmes courants# Email Configuration (Brevo SMTP)Next.js choisira automatiquement un port libre (3001, 3002...)
+
+
+
+### ❌ "Failed to fetch"EMAIL_HOST=smtp-relay.brevo.com
+
+
+
+**Cause** : Le backend n'est pas démarré ou l'URL est incorrecte.EMAIL_PORT=587### ❌ Erreurs de compilation
+
+
+
+**Solution** :EMAIL_USER=votre_email@exemple.comAssurez-vous d'avoir bien exécuté `npm install`
+
+1. Vérifiez que votre backend Flask tourne sur le bon port
+
+2. Vérifiez `lib/api-config.ts` pour l'URL correcteEMAIL_PASSWORD=votre_cle_api_brevo
+
+3. Vérifiez les CORS sur le backend
+
+EMAIL_FROM=noreply@forstek.tn## 📖 Documentation Complète
+
+### ❌ "Module not found"
+
+```
+
+**Cause** : Dépendances non installées.
+
+Pour plus de détails, consultez [INSTALLATION.md](./INSTALLATION.md)
+
+**Solution** :
+
+```bash### Frontend - Configuration API
+
+rm -rf node_modules package-lock.json
+
+npm install## 🔐 Configuration Git (pour les contributeurs)
+
+```
+
+Le fichier `lib/api-config.ts` est déjà configuré pour pointer vers `http://localhost:5000/api`.
+
+### ❌ Page blanche
+
+```bash
+
+**Cause** : Erreur de compilation.
+
+## 🎯 Démarragegit config user.name "Votre Nom"
+
+**Solution** :
+
+```bashgit config user.email "votre@email.com"
+
+rm -rf .next
+
+npm run dev### Option 1 : Démarrage automatique (Windows)```
+
+```
+
+
+
+Consultez la console du navigateur (F12) pour plus de détails.Double-cliquez sur `DEMARRER.bat` qui lance automatiquement :
+
+- Backend Flask sur port 5000
+
+---- Frontend Next.js sur port 3000
+
+
+
+## 🔗 Backend### Option 2 : Démarrage manuel
+
+
+
+Ce frontend est conçu pour fonctionner avec un backend Flask.**Terminal 1 - Backend :**
+
+```bash
+
+**Backend recommandé** : [front-back-forstek](https://github.com/hazem02b/front-back-forstek)cd backend-flask
+
+.\.venv\Scripts\python.exe app.py
+
+### Endpoints API utilisés```
+
+
+
+| Méthode | Endpoint | Description |**Terminal 2 - Frontend :**
+
+|---------|----------|-------------|```bash
+
+| POST | `/api/register` | Inscription |npm run dev
+
+| POST | `/api/login` | Connexion (génère code 2FA) |```
+
+| POST | `/api/verify-2fa` | Vérification code 2FA |
+
+| GET | `/api/users/me` | Récupérer profil utilisateur |### Accès à l'application
+
+| PUT | `/api/users/me` | Mettre à jour profil |
+
+| POST | `/api/upload` | Upload de CV |- **Frontend** : http://localhost:3000
+
+- **Backend API** : http://localhost:5000/api
+
+---
+
+## 📁 Structure du projet
+
+## 📝 Commandes disponibles
+
+```
+
+| Commande | Description |front-back-forstek/
+
+|----------|-------------|├── app/                          # Pages Next.js (App Router)
+
+| `npm run dev` | Serveur de développement (port 3000) |│   ├── register/                 # Page d'inscription
+
+| `npm run build` | Build de production |│   ├── login/                    # Page de connexion
+
+| `npm start` | Démarrer en production |│   ├── 2fa/                      # Vérification 2FA
+
+| `npm run lint` | Vérifier le code (ESLint) |│   ├── dashboard/                # Dashboard utilisateur
+
+| `npm run type-check` | Vérifier les types TypeScript |│   ├── settings/                 # Paramètres & profil
+
+│   ├── offres/                   # Offres de stage
+
+---│   ├── roadmaps/                 # Roadmaps d'apprentissage
+
+│   ├── mentorship/               # Programme de mentorat
+
+## 🤝 Contribution│   └── forum/                    # Forum communautaire
+
+├── components/                   # Composants React
+
+1. Fork le projet│   ├── ProtectedRoute.tsx        # HOC pour routes protégées
+
+2. Créez une branche (`git checkout -b feature/AmazingFeature`)│   ├── CVUploader.tsx            # Upload de CV
+
+3. Committez vos changements (`git commit -m 'Add AmazingFeature'`)│   ├── ModernBackground.tsx      # Background animé
+
+4. Push vers la branche (`git push origin feature/AmazingFeature`)│   └── FloatingParticles.tsx     # Particules flottantes
+
+5. Ouvrez une Pull Request├── contexts/                     # Contextes React
+
+│   └── AuthContext.tsx           # Gestion authentification
+
+---├── lib/                          # Utilitaires
+
+│   └── api-config.ts             # Configuration API
+
+## 👨‍💻 Développeur├── backend-flask/                # Backend Flask
+
+│   ├── app.py                    # Application Flask principale
+
+**Hazem Ben Brahim**│   ├── models.py                 # Modèles SQLAlchemy
+
+- GitHub: [@hazem02b](https://github.com/hazem02b)│   ├── utils.py                  # Fonctions utilitaires
+
+- Email: hazem@forstek.tn│   ├── create_db.py              # Script création DB
+
+│   ├── .env                      # Variables d'environnement
+
+---│   ├── instance/                 # Base de données SQLite
+
+│   └── uploads/cvs/              # CVs uploadés
+
+## 📄 Licence├── public/                       # Assets statiques
+
+├── .gitignore                    # Fichiers ignorés par Git
+
+MIT License - Voir le fichier LICENSE pour plus de détails.├── package.json                  # Dépendances Node.js
+
+├── tailwind.config.ts            # Configuration Tailwind
+
+---├── tsconfig.json                 # Configuration TypeScript
+
+└── README.md                     # Ce fichier
+
+## 🌟 Projets liés```
+
+
+
+- 🔗 [front-back-forstek](https://github.com/hazem02b/front-back-forstek) - Version complète avec backend Flask## 🔌 API Endpoints
+
+- 🔗 [front-end](https://github.com/hazem02b/front-end) - Frontend uniquement (ce repo)
 
 ### Authentification
 
+---
+
 | Méthode | Endpoint | Description |
-|---------|----------|-------------|
+
+**⭐ Si ce projet vous plaît, n'hésitez pas à lui donner une étoile sur GitHub !**|---------|----------|-------------|
+
 | POST | `/api/register` | Inscription d'un nouvel utilisateur |
 | POST | `/api/login` | Connexion et génération code 2FA |
 | POST | `/api/verify-2fa` | Vérification code 2FA et obtention tokens |
