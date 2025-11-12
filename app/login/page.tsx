@@ -55,17 +55,25 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      // MODE DÉMO : Connexion directe sans API
+      // MODE DÉMO : Connexion avec redirection vers 2FA
       if (isDemoMode) {
         await new Promise(resolve => setTimeout(resolve, 800)); // Simuler délai
         const success = await login(formData.email || DEMO_MODE.demoUser.email, formData.password || 'demo');
         if (success) {
           setSuccess('🎭 Connexion en mode démo réussie !');
-          setTimeout(() => router.push('/dashboard'), 1000);
+          setLoading(false);
+          
+          // Stocker l'email pour la page 2FA
+          localStorage.setItem('pendingEmail', formData.email || DEMO_MODE.demoUser.email);
+          
+          // Redirection vers 2FA même en mode démo
+          setTimeout(() => router.push('/2fa'), 1000);
+          return; // Important: sortir de la fonction
         } else {
           setError('Erreur de connexion en mode démo');
+          setLoading(false);
+          return;
         }
-        return;
       }
 
       // MODE NORMAL : Appel API backend pour connexion
@@ -84,6 +92,7 @@ export default function LoginPage() {
 
       if (!response.ok) {
         setError(data.error || 'Email ou mot de passe incorrect');
+        setLoading(false);
         return;
       }
 

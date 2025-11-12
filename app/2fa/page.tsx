@@ -9,6 +9,7 @@ import ModernBackground from '@/components/ModernBackground';
 import FloatingParticles from '@/components/FloatingParticles';
 import { useAuth } from '@/contexts/AuthContext';
 import { API_ENDPOINTS } from '@/lib/api-config';
+import { DEMO_MODE, checkBackendAvailable } from '@/lib/demo-config';
 
 export default function TwoFactorAuthPage() {
   const router = useRouter();
@@ -19,20 +20,29 @@ export default function TwoFactorAuthPage() {
   const [success, setSuccess] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
   const [userEmail, setUserEmail] = useState('');
+  const [isDemoMode, setIsDemoMode] = useState(false);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  // Simuler l'envoi d'email au chargement
+  // Vérifier le mode démo et simuler l'envoi d'email au chargement
   useEffect(() => {
-    // Récupérer l'email depuis localStorage
-    const pendingEmail = localStorage.getItem('pendingEmail');
-    if (!pendingEmail) {
-      router.push('/login');
-      return;
-    }
+    const checkMode = async () => {
+      // Vérifier si on est en mode démo
+      const demoMode = DEMO_MODE.enabled || !(await checkBackendAvailable());
+      setIsDemoMode(demoMode);
 
-    setUserEmail(pendingEmail);
-    inputRefs.current[0]?.focus();
-    setEmailSent(true);
+      // Récupérer l'email depuis localStorage
+      const pendingEmail = localStorage.getItem('pendingEmail');
+      if (!pendingEmail) {
+        router.push('/login');
+        return;
+      }
+
+      setUserEmail(pendingEmail);
+      inputRefs.current[0]?.focus();
+      setEmailSent(true);
+    };
+
+    checkMode();
   }, [router]);
 
   const handleChange = (index: number, value: string) => {
@@ -123,7 +133,35 @@ export default function TwoFactorAuthPage() {
     const pendingEmail = localStorage.getItem('pendingEmail');
 
     try {
-      // Appel API backend pour vérifier le code 2FA
+      // MODE DÉMO : Accepter n'importe quel code
+      if (isDemoMode) {
+        await new Promise(resolve => setTimeout(resolve, 800)); // Simuler délai
+
+        // Stocker les infos utilisateur démo
+        const demoUserWithProfile = {
+          ...DEMO_MODE.demoUser,
+          profileComplete: true,
+          type: 'student' as const,
+        };
+        
+        localStorage.setItem('user', JSON.stringify(demoUserWithProfile));
+        localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('demoAuthenticated', 'true');
+        localStorage.removeItem('pendingEmail');
+        
+        console.log('✅ Authentification 2FA démo réussie:', demoUserWithProfile);
+        
+        setSuccess(true);
+        setLoading(false);
+        
+        // Redirection vers le dashboard
+        setTimeout(() => {
+          window.location.href = '/dashboard';
+        }, 1000);
+        return;
+      }
+
+      // MODE NORMAL : Appel API backend pour vérifier le code 2FA
       const response = await fetch(API_ENDPOINTS.verify2FA, {
         method: 'POST',
         headers: {
@@ -218,11 +256,23 @@ export default function TwoFactorAuthPage() {
               
               {/* Message Mode Développement */}
               <div className="p-4 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
-                <p className="text-yellow-400 text-sm font-medium mb-2">⚠️ Mode Développement</p>
+                <p className="text-yellow-400 text-sm font-medium mb-2">
+                  {isDemoMode ? '🎭 Mode Démo' : '⚠️ Mode Développement'}
+                </p>
                 <p className="text-gray-300 text-xs leading-relaxed">
-                  L'envoi d'emails n'est pas configuré. Le <strong>code 2FA est affiché dans la console du serveur Flask</strong>.
-                  <br />
-                  Regardez la fenêtre PowerShell/CMD qui exécute Flask pour voir le code.
+                  {isDemoMode ? (
+                    <>
+                      En mode démo, <strong>n'importe quel code à 6 chiffres</strong> sera accepté.
+                      <br />
+                      Essayez par exemple : <span className="font-mono text-[#60A5FA]">123456</span>
+                    </>
+                  ) : (
+                    <>
+                      L'envoi d'emails n'est pas configuré. Le <strong>code 2FA est affiché dans la console du serveur Flask</strong>.
+                      <br />
+                      Regardez la fenêtre PowerShell/CMD qui exécute Flask pour voir le code.
+                    </>
+                  )}
                 </p>
               </div>
             </div>
