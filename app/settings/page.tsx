@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { 
@@ -23,6 +23,8 @@ import ModernBackground from '@/components/ModernBackground';
 import FloatingParticles from '@/components/FloatingParticles';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { useAuth } from '@/contexts/AuthContext';
+import CVUploader from '@/components/CVUploader';
+import { API_ENDPOINTS } from '@/lib/api-config';
 
 export default function SettingsPage() {
   const { user, logout, updateProfile } = useAuth();
@@ -31,13 +33,62 @@ export default function SettingsPage() {
   const [saved, setSaved] = useState(false);
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [profileData, setProfileData] = useState({
-    name: user?.name || '',
-    email: user?.email || '',
+    name: '',
+    email: '',
     phone: '',
-    location: 'Tunis, Tunisie'
+    location: '',
+    bio: '',
+    university: '',
+    degree: '',
+    graduation_year: '',
+    linkedin: '',
+    github: '',
+    website: ''
   });
+
+  // Charger les données du profil depuis le backend
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        if (!accessToken) return;
+
+        const response = await fetch(API_ENDPOINTS.usersMe, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('📥 Profil chargé:', data.user);
+          if (data.success && data.user) {
+            setProfileData({
+              name: data.user.name || '',
+              email: data.user.email || '',
+              phone: data.user.phone || '',
+              location: data.user.location || '',
+              bio: data.user.bio || '',
+              university: data.user.university || '',
+              degree: data.user.degree || '',
+              graduation_year: data.user.graduation_year || '',
+              linkedin: data.user.linkedin || '',
+              github: data.user.github || '',
+              website: data.user.website || ''
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Erreur lors du chargement du profil:', error);
+      }
+    };
+
+    loadProfile();
+  }, []);
 
   const [securityData, setSecurityData] = useState({
     oldPassword: '',
@@ -60,24 +111,113 @@ export default function SettingsPage() {
     timezone: 'Africa/Tunis'
   });
 
-  const handleSaveProfile = () => {
-    updateProfile({ name: profileData.name });
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
+  const handleSaveProfile = async () => {
+    try {
+      setLoading(true);
+      
+      console.log('📤 Envoi des données du profil:', profileData);
+      
+      // Appeler directement l'API au lieu d'utiliser updateProfile
+      const accessToken = localStorage.getItem('accessToken');
+      const response = await fetch(API_ENDPOINTS.usersMe, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          name: profileData.name,
+          phone: profileData.phone,
+          location: profileData.location,
+          bio: profileData.bio,
+          university: profileData.university,
+          degree: profileData.degree,
+          graduation_year: profileData.graduation_year,
+          linkedin: profileData.linkedin,
+          github: profileData.github,
+          website: profileData.website
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('✅ Profil mis à jour:', data);
+        
+        // Mettre à jour le localStorage
+        const updatedUser = {
+          ...user,
+          name: profileData.name,
+          phone: profileData.phone,
+        };
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        
+        setSaved(true);
+        setTimeout(() => setSaved(false), 3000);
+        alert('✅ Profil sauvegardé avec succès !');
+      } else if (response.status === 401) {
+        // Token expiré ou invalide
+        const errorData = await response.json();
+        console.error('❌ Token invalide:', errorData);
+        alert('❌ Votre session a expiré. Veuillez vous reconnecter.');
+        
+        // Rediriger vers la page de connexion
+        localStorage.clear();
+        window.location.href = '/login';
+      } else {
+        const errorData = await response.json();
+        console.error('❌ Erreur API:', errorData);
+        alert('❌ Erreur lors de la sauvegarde: ' + (errorData.error || 'Erreur inconnue'));
+      }
+    } catch (error) {
+      console.error('❌ Erreur réseau:', error);
+      alert('❌ Erreur de connexion au serveur. Vérifiez que Flask est démarré.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleSavePassword = () => {
+  const handleSavePassword = async () => {
     if (securityData.newPassword !== securityData.confirmPassword) {
       alert('Les mots de passe ne correspondent pas');
       return;
     }
-    if (securityData.newPassword.length < 6) {
-      alert('Le mot de passe doit contenir au moins 6 caractères');
+    if (securityData.newPassword.length < 8) {
+      alert('Le mot de passe doit contenir au moins 8 caractères');
       return;
     }
-    // Simuler la mise à jour
-    alert('Mot de passe mis à jour avec succès !');
-    setSecurityData({ oldPassword: '', newPassword: '', confirmPassword: '', twoFactorEnabled: securityData.twoFactorEnabled });
+
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      
+      const response = await fetch(API_ENDPOINTS.usersMe, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          currentPassword: securityData.oldPassword,
+          newPassword: securityData.newPassword,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.error || 'Erreur lors de la mise à jour du mot de passe');
+        return;
+      }
+
+      alert('Mot de passe mis à jour avec succès !');
+      setSecurityData({ 
+        oldPassword: '', 
+        newPassword: '', 
+        confirmPassword: '', 
+        twoFactorEnabled: securityData.twoFactorEnabled 
+      });
+    } catch (error) {
+      alert('Erreur de connexion');
+    }
   };
 
   const handleLogout = () => {
@@ -250,16 +390,109 @@ export default function SettingsPage() {
                         type="text"
                         value={profileData.location}
                         onChange={(e) => setProfileData({ ...profileData, location: e.target.value })}
+                        placeholder="Tunis, Tunisie"
                         className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20 transition-all"
                       />
                     </div>
 
+                    <div>
+                      <label className="block text-sm font-medium text-gray-400 mb-2">Bio</label>
+                      <textarea
+                        value={profileData.bio}
+                        onChange={(e) => setProfileData({ ...profileData, bio: e.target.value })}
+                        placeholder="Parlez-nous de vous..."
+                        rows={4}
+                        className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20 transition-all resize-none"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-400 mb-2">Université</label>
+                        <input
+                          type="text"
+                          value={profileData.university}
+                          onChange={(e) => setProfileData({ ...profileData, university: e.target.value })}
+                          placeholder="ESPRIT, INSAT..."
+                          className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20 transition-all"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-400 mb-2">Diplôme</label>
+                        <input
+                          type="text"
+                          value={profileData.degree}
+                          onChange={(e) => setProfileData({ ...profileData, degree: e.target.value })}
+                          placeholder="Ingénieur, Licence..."
+                          className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20 transition-all"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-400 mb-2">Année de diplôme</label>
+                      <input
+                        type="text"
+                        value={profileData.graduation_year}
+                        onChange={(e) => setProfileData({ ...profileData, graduation_year: e.target.value })}
+                        placeholder="2025"
+                        className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20 transition-all"
+                      />
+                    </div>
+
+                    <div className="pt-4 border-t border-white/10">
+                      <h3 className="text-lg font-semibold text-white mb-4">Réseaux sociaux</h3>
+                      
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-400 mb-2">LinkedIn</label>
+                          <input
+                            type="text"
+                            value={profileData.linkedin}
+                            onChange={(e) => setProfileData({ ...profileData, linkedin: e.target.value })}
+                            placeholder="linkedin.com/in/votre-profil"
+                            className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20 transition-all"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-400 mb-2">GitHub</label>
+                          <input
+                            type="text"
+                            value={profileData.github}
+                            onChange={(e) => setProfileData({ ...profileData, github: e.target.value })}
+                            placeholder="github.com/votre-username"
+                            className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20 transition-all"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-400 mb-2">Site Web</label>
+                          <input
+                            type="text"
+                            value={profileData.website}
+                            onChange={(e) => setProfileData({ ...profileData, website: e.target.value })}
+                            placeholder="votresite.com"
+                            className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20 transition-all"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* CV Uploader */}
+                    <div className="pt-4 border-t border-white/10">
+                      <h3 className="text-lg font-semibold text-white mb-4">CV</h3>
+                      <CVUploader />
+                    </div>
+
                     <Button 
                       onClick={handleSaveProfile}
-                      className="w-full bg-gradient-to-r from-[#2563EB] to-[#7C3AED] hover:from-[#1D4ED8] hover:to-[#6D28D9] text-white border-none shadow-lg"
+                      disabled={loading}
+                      className="w-full bg-gradient-to-r from-[#2563EB] to-[#7C3AED] hover:from-[#1D4ED8] hover:to-[#6D28D9] text-white border-none shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <Save className="w-4 h-4 mr-2" />
-                      Enregistrer les modifications
+                      {loading ? 'Enregistrement...' : 'Enregistrer les modifications'}
                     </Button>
                   </div>
                 )}

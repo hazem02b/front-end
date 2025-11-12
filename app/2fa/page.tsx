@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import ModernBackground from '@/components/ModernBackground';
 import FloatingParticles from '@/components/FloatingParticles';
 import { useAuth } from '@/contexts/AuthContext';
+import { API_ENDPOINTS } from '@/lib/api-config';
 
 export default function TwoFactorAuthPage() {
   const router = useRouter();
@@ -17,25 +18,22 @@ export default function TwoFactorAuthPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   // Simuler l'envoi d'email au chargement
   useEffect(() => {
-    // Rediriger si pas connecté
-    if (!user) {
+    // Récupérer l'email depuis localStorage
+    const pendingEmail = localStorage.getItem('pendingEmail');
+    if (!pendingEmail) {
       router.push('/login');
       return;
     }
 
-    // Simuler l'envoi d'email
-    setTimeout(() => {
-      setEmailSent(true);
-      console.log('📧 Code 2FA envoyé à:', user.email);
-      console.log('🔑 Code de test: 123456');
-    }, 500);
-
+    setUserEmail(pendingEmail);
     inputRefs.current[0]?.focus();
-  }, [user, router]);
+    setEmailSent(true);
+  }, [router]);
 
   const handleChange = (index: number, value: string) => {
     // Only allow numbers
@@ -78,18 +76,36 @@ export default function TwoFactorAuthPage() {
     inputRefs.current[lastIndex]?.focus();
   };
 
-  const resendCode = () => {
+  const resendCode = async () => {
     setCode(['', '', '', '', '', '']);
     setError('');
     setSuccess(false);
     setEmailSent(false);
     inputRefs.current[0]?.focus();
     
-    // Simuler l'envoi d'email
-    setTimeout(() => {
-      setEmailSent(true);
-      alert(`📧 Un nouveau code a été envoyé à ${user?.email} !\n\n🔑 Code de test: 123456`);
-    }, 500);
+    const pendingEmail = localStorage.getItem('pendingEmail');
+    
+    try {
+      // Appel API pour renvoyer le code
+      const response = await fetch(API_ENDPOINTS.resend2FA, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: pendingEmail,
+        }),
+      });
+
+      if (response.ok) {
+        setEmailSent(true);
+        alert(`📧 Un nouveau code a été envoyé à ${pendingEmail} !`);
+      } else {
+        setError('Erreur lors du renvoi du code');
+      }
+    } catch (err) {
+      setError('Erreur de connexion');
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -104,21 +120,55 @@ export default function TwoFactorAuthPage() {
     setLoading(true);
     setError('');
 
-    // Simulate API call
-    setTimeout(() => {
-      // For demo: accept 123456 as valid code
-      if (fullCode === '123456') {
-        setSuccess(true);
-        setTimeout(() => {
-          router.push('/dashboard');
-        }, 1500);
-      } else {
-        setError('Code incorrect. Veuillez réessayer.');
+    const pendingEmail = localStorage.getItem('pendingEmail');
+
+    try {
+      // Appel API backend pour vérifier le code 2FA
+      const response = await fetch(API_ENDPOINTS.verify2FA, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: pendingEmail,
+          code: fullCode,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error || 'Code incorrect. Veuillez réessayer.');
         setCode(['', '', '', '', '', '']);
         inputRefs.current[0]?.focus();
+        return;
       }
+
+      // Stocker les infos utilisateur et le token
+      const userWithProfile = {
+        ...data.user,
+        profileComplete: !!data.user.phone,
+        type: (data.user.type || 'STUDENT').toLowerCase() as 'student' | 'company',
+      };
+      
+      localStorage.setItem('user', JSON.stringify(userWithProfile));
+      localStorage.setItem('accessToken', data.accessToken);
+      localStorage.setItem('isAuthenticated', 'true');
+      localStorage.removeItem('pendingEmail');
+      
+      console.log('✅ Authentification réussie:', userWithProfile);
+      
+      setSuccess(true);
+      
+      // Forcer le rechargement de la page pour que AuthContext soit mis à jour
+      setTimeout(() => {
+        window.location.href = '/dashboard';
+      }, 1500);
+    } catch (err: any) {
+      setError(err.message || 'Une erreur est survenue');
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -157,11 +207,23 @@ export default function TwoFactorAuthPage() {
           </h1>
           
           {emailSent ? (
-            <div className="mb-8 p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center gap-3">
-              <Mail className="w-5 h-5 text-blue-400 flex-shrink-0" />
-              <div className="text-sm">
-                <p className="text-blue-400 font-medium">Code envoyé avec succès !</p>
-                <p className="text-gray-400">Vérifiez votre boîte mail : <span className="text-white font-mono">{user?.email}</span></p>
+            <div className="mb-8 space-y-3">
+              <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center gap-3">
+                <Mail className="w-5 h-5 text-blue-400 flex-shrink-0" />
+                <div className="text-sm">
+                  <p className="text-blue-400 font-medium">Code d'authentification généré !</p>
+                  <p className="text-gray-400">Pour : <span className="text-white font-mono">{userEmail}</span></p>
+                </div>
+              </div>
+              
+              {/* Message Mode Développement */}
+              <div className="p-4 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
+                <p className="text-yellow-400 text-sm font-medium mb-2">⚠️ Mode Développement</p>
+                <p className="text-gray-300 text-xs leading-relaxed">
+                  L'envoi d'emails n'est pas configuré. Le <strong>code 2FA est affiché dans la console du serveur Flask</strong>.
+                  <br />
+                  Regardez la fenêtre PowerShell/CMD qui exécute Flask pour voir le code.
+                </p>
               </div>
             </div>
           ) : (

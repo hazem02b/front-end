@@ -1,0 +1,261 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Modèle Utilisateur
+model User {
+  id                String          @id @default(cuid())
+  email             String          @unique
+  password          String
+  name              String
+  phone             String?
+  location          String?
+  bio               String?
+  type              UserType        @default(STUDENT)
+  profileComplete   Boolean         @default(false)
+  emailVerified     Boolean         @default(false)
+  twoFactorEnabled  Boolean         @default(false)
+  twoFactorCode     String?
+  twoFactorExpiry   DateTime?
+  avatar            String?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  
+  // Relations
+  studentProfile    StudentProfile?
+  companyProfile    CompanyProfile?
+  applications      Application[]
+  posts             ForumPost[]
+  comments          Comment[]
+  messages          Message[]       @relation("SentMessages")
+  receivedMessages  Message[]       @relation("ReceivedMessages")
+  notifications     Notification[]
+  
+  @@map("users")
+}
+
+enum UserType {
+  STUDENT
+  COMPANY
+  MENTOR
+}
+
+// Profil Étudiant
+model StudentProfile {
+  id              String     @id @default(cuid())
+  userId          String     @unique
+  user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  university      String?
+  degree          String?
+  graduationYear  String?
+  skills          String? // JSON array
+  cvUrl           String?
+  linkedinUrl     String?
+  githubUrl       String?
+  portfolioUrl    String?
+  
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  
+  @@map("student_profiles")
+}
+
+// Profil Entreprise
+model CompanyProfile {
+  id              String     @id @default(cuid())
+  userId          String     @unique
+  user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  companyName     String
+  industry        String?
+  size            String?
+  website         String?
+  description     String?
+  logoUrl         String?
+  
+  jobs            Job[]
+  
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  
+  @@map("company_profiles")
+}
+
+// Offres de stage
+model Job {
+  id              String          @id @default(cuid())
+  companyId       String
+  company         CompanyProfile  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  
+  title           String
+  description     String
+  requirements    String? // JSON array
+  location        String
+  type            JobType         @default(INTERNSHIP)
+  duration        String?
+  salary          String?
+  deadline        DateTime?
+  status          JobStatus       @default(ACTIVE)
+  
+  applications    Application[]
+  
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  
+  @@map("jobs")
+}
+
+enum JobType {
+  INTERNSHIP
+  FULL_TIME
+  PART_TIME
+  FREELANCE
+}
+
+enum JobStatus {
+  ACTIVE
+  CLOSED
+  DRAFT
+}
+
+// Candidatures
+model Application {
+  id              String              @id @default(cuid())
+  jobId           String
+  job             Job                 @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  userId          String
+  user            User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  coverLetter     String?
+  cvUrl           String?
+  status          ApplicationStatus   @default(PENDING)
+  
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  
+  @@unique([jobId, userId])
+  @@map("applications")
+}
+
+enum ApplicationStatus {
+  PENDING
+  REVIEWING
+  ACCEPTED
+  REJECTED
+  INTERVIEW
+}
+
+// Forum - Posts
+model ForumPost {
+  id              String     @id @default(cuid())
+  userId          String
+  user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  title           String
+  content         String
+  category        String?
+  tags            String? // JSON array
+  views           Int        @default(0)
+  likes           Int        @default(0)
+  
+  comments        Comment[]
+  
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  
+  @@map("forum_posts")
+}
+
+// Forum - Commentaires
+model Comment {
+  id              String     @id @default(cuid())
+  postId          String
+  post            ForumPost  @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId          String
+  user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  content         String
+  likes           Int        @default(0)
+  
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  
+  @@map("comments")
+}
+
+// Messages
+model Message {
+  id              String     @id @default(cuid())
+  senderId        String
+  sender          User       @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId      String
+  receiver        User       @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+  
+  content         String
+  read            Boolean    @default(false)
+  
+  createdAt       DateTime   @default(now())
+  
+  @@map("messages")
+}
+
+// Notifications
+model Notification {
+  id              String     @id @default(cuid())
+  userId          String
+  user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  type            String
+  title           String
+  message         String
+  link            String?
+  read            Boolean    @default(false)
+  
+  createdAt       DateTime   @default(now())
+  
+  @@map("notifications")
+}
+
+// Roadmaps
+model Roadmap {
+  id              String        @id @default(cuid())
+  title           String
+  description     String
+  level           String
+  duration        String
+  category        String
+  icon            String?
+  
+  steps           RoadmapStep[]
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  @@map("roadmaps")
+}
+
+model RoadmapStep {
+  id              String     @id @default(cuid())
+  roadmapId       String
+  roadmap         Roadmap    @relation(fields: [roadmapId], references: [id], onDelete: Cascade)
+  
+  order           Int
+  title           String
+  description     String
+  duration        String
+  resources       String? // JSON array
+  
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  
+  @@map("roadmap_steps")
+}
