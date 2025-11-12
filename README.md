@@ -1,4 +1,4 @@
-# 🎓 Forstek - Frontend (Next.js)# 🎓 Forstek - Plateforme de Stages en Tunisie# 🎓 Forstek - Plateforme de Stages pour Étudiants Tunisiens
+# 🎓 Forstek - Frontend Next.js# 🎓 Forstek - Frontend (Next.js)# 🎓 Forstek - Plateforme de Stages en Tunisie# 🎓 Forstek - Plateforme de Stages pour Étudiants Tunisiens
 
 
 
@@ -6,279 +6,561 @@
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat&logo=typescript)](https://www.typescriptlang.org/)
 
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8?style=flat&logo=tailwind-css)](https://tailwindcss.com/)Plateforme web complète pour connecter étudiants et entreprises tunisiennes, avec système d'authentification 2FA, gestion de profils, et recherche de stages.Plateforme web moderne connectant les étudiants tunisiens avec des opportunités de stages et de mentorat.
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8?style=flat&logo=tailwind-css)](https://tailwindcss.com/)[![Next.js](https://img.shields.io/badge/Next.js-14-black?style=flat&logo=next.js)](https://nextjs.org/)
 
 
 
-Plateforme web moderne connectant les étudiants tunisiens avec des opportunités de stages, roadmaps d'apprentissage, et mentorat.
+Plateforme web moderne connectant les étudiants tunisiens avec des opportunités de stages, roadmaps d'apprentissage, et mentorat.[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat&logo=typescript)](https://www.typescriptlang.org/)
 
 
 
-> 📦 **Note** : Ce repo contient uniquement le frontend. Pour le backend Flask, voir [front-back-forstek](https://github.com/hazem02b/front-back-forstek).## 📋 Table des matières## ✨ Fonctionnalités
+---[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8?style=flat&logo=tailwind-css)](https://tailwindcss.com/)Plateforme web complète pour connecter étudiants et entreprises tunisiennes, avec système d'authentification 2FA, gestion de profils, et recherche de stages.Plateforme web moderne connectant les étudiants tunisiens avec des opportunités de stages et de mentorat.
 
 
 
----
+## ⚡ Démarrage Rapide (3 étapes)
 
 
 
-## ✨ Fonctionnalités- [Technologies](#technologies)- 🏠 **Page d'accueil** : Présentation de la plateforme
+```bashPlateforme web moderne connectant les étudiants tunisiens avec des opportunités de stages, roadmaps d'apprentissage, et mentorat.
 
-
-
-### Pages et Navigation- [Fonctionnalités](#fonctionnalités)- 🔐 **Authentification** : Connexion et inscription (Étudiant/Entreprise)
-
-- 🏠 **Page d'accueil** : Présentation de la plateforme avec design moderne
-
-- 💼 **Offres de stage** : Recherche et filtrage d'opportunités- [Installation](#installation)- 💼 **Offres de stage** : Recherche et filtrage d'opportunités
-
-- 🗺️ **Roadmaps** : Parcours d'apprentissage guidés
-
-- 🎯 **Mentorat** : Connexion avec des mentors professionnels- [Configuration](#configuration)- 📊 **Dashboard** : Suivi des candidatures et statistiques
-
-- 💬 **Forum** : Discussions communautaires
-
-- ℹ️ **À propos** : Histoire et équipe de Forstek- [Démarrage](#démarrage)- 👤 **Profil** : Gestion du profil et compétences
-
-- 📞 **Contact** : Formulaire de contact
-
-- [Structure du projet](#structure-du-projet)- 💬 **Forum** : Discussions communautaires
-
-### Authentification et Profil
-
-- 🔐 **Connexion/Inscription** : Interface moderne avec choix du type de compte (Étudiant/Entreprise)- [API Endpoints](#api-endpoints)- 🎯 **Mentorat** : Connexion avec des mentors professionnels
-
-- 🔑 **2FA** : Page de vérification du code à deux facteurs
-
-- 📊 **Dashboard** : Tableau de bord personnalisé- ℹ️ **À propos** : Histoire et équipe de Forstek
-
-- 👤 **Profil** : Gestion complète du profil (bio, formation, compétences, liens sociaux)
-
-- ⚙️ **Paramètres** : Modification des informations personnelles et upload de CV## 🚀 Technologies- 📞 **Contact** : Formulaire de contact et informations
-
-
-
-### UI/UX
-
-- ✨ Design moderne avec animations Framer Motion
-
-- 🎨 Dégradés et effets glassmorphism### Frontend## 🚀 Installation Rapide
-
-- 📱 Responsive design (mobile-first)
-
-- 🔔 Navigation conditionnelle selon l'authentification- **Next.js 14** - Framework React avec App Router
-
-- 🛡️ Protection des routes privées
-
-- **TypeScript** - Typage statique### 1️⃣ Cloner le repository
-
----
-
-- **Tailwind CSS** - Styling moderne```bash
-
-## 🚀 Technologies
-
-- **Lucide React** - Icônesgit clone https://github.com/hazem02b/front-end.git
-
-- **Next.js 14** - Framework React avec App Router
-
-- **TypeScript** - Typage statique pour plus de sécuritécd front-end
-
-- **Tailwind CSS v4** - Framework CSS utility-first
-
-- **Lucide React** - Bibliothèque d'icônes modernes### Backend```
-
-- **Framer Motion** - Animations fluides
-
-- **Radix UI** - Composants accessibles- **Flask** - Framework Python léger
-
-
-
----- **SQLAlchemy** - ORM pour la base de données### 2️⃣ Installer les dépendances
-
-
-
-## 📦 Installation- **SQLite** - Base de données```bash
-
-
-
-### Prérequis- **JWT** - Authentification par tokensnpm install
-
-- Node.js 18+ et npm
-
-- Git- **Bcrypt** - Hashage des mots de passe```
-
-
-
-### 1. Cloner le repository- **2FA** - Authentification à deux facteurs⚠️ **IMPORTANT** : Cette étape est OBLIGATOIRE après chaque clonage !
-
-
-
-```bash
+# 1️⃣ Cloner
 
 git clone https://github.com/hazem02b/front-end.git
 
-cd front-end## ✨ Fonctionnalités### 3️⃣ Lancer le serveur
+cd front-end
 
-```
+> 📦 **Note** : Ce repo contient uniquement le frontend. Pour le backend Flask, voir [front-back-forstek](https://github.com/hazem02b/front-back-forstek).## 📋 Table des matières## ✨ Fonctionnalités
 
-```bash
+# 2️⃣ Installer
 
-### 2. Installer les dépendances
+npm install
 
-### Authentificationnpm run dev
 
-```bash
 
-npm install- ✅ Inscription avec validation (email, mot de passe, type de compte)```
+# 3️⃣ Lancer---
 
-```
-
-- ✅ Connexion avec authentification 2FA
-
-> ⚠️ **Important** : Cette étape est essentielle ! Le dossier `node_modules` (~500 MB) n'est pas inclus dans Git et doit être généré localement.
-
-- ✅ Codes 2FA envoyés par email (Brevo SMTP)### 4️⃣ Ouvrir dans le navigateur
-
-### 3. Configurer l'API backend (optionnel)
-
-- ✅ Tokens JWT avec expiration 24hVisitez : **http://localhost:3000**
-
-Si vous avez un backend Flask, modifiez `lib/api-config.ts` :
-
-- ✅ Protection des routes privées
-
-```typescript
-
-export const API_BASE_URL = 'http://localhost:5000'; // URL de votre backend- ✅ Gestion de session avec localStorage
+npm run dev
 
 ```
 
 
+
+**➡️ Ouvrez http://localhost:3000**## ✨ Fonctionnalités- [Technologies](#technologies)- 🏠 **Page d'accueil** : Présentation de la plateforme
+
+
+
+✅ **Le site fonctionne immédiatement !**
+
+
+
+---### Pages et Navigation- [Fonctionnalités](#fonctionnalités)- 🔐 **Authentification** : Connexion et inscription (Étudiant/Entreprise)
+
+
+
+## 🔄 Deux Modes d'Utilisation- 🏠 **Page d'accueil** : Présentation de la plateforme avec design moderne
+
+
+
+### Mode 1️⃣ : Frontend Seul (Mode Démo) ✅ RECOMMANDÉ- 💼 **Offres de stage** : Recherche et filtrage d'opportunités- [Installation](#installation)- 💼 **Offres de stage** : Recherche et filtrage d'opportunités
+
+
+
+**Parfait pour :**- 🗺️ **Roadmaps** : Parcours d'apprentissage guidés
+
+- 🎨 Tester l'interface utilisateur
+
+- 🖼️ Voir le design et les animations- 🎯 **Mentorat** : Connexion avec des mentors professionnels- [Configuration](#configuration)- 📊 **Dashboard** : Suivi des candidatures et statistiques
+
+- 📱 Tester le responsive design
+
+- 👀 Démonstration visuelle du projet- 💬 **Forum** : Discussions communautaires
+
+
+
+**Limitations :**- ℹ️ **À propos** : Histoire et équipe de Forstek- [Démarrage](#démarrage)- 👤 **Profil** : Gestion du profil et compétences
+
+- ⚠️ L'authentification ne fonctionnera pas (erreur "Failed to fetch")
+
+- ⚠️ Les données de profil ne seront pas sauvegardées- 📞 **Contact** : Formulaire de contact
+
+- ⚠️ Pas d'upload de CV
+
+- [Structure du projet](#structure-du-projet)- 💬 **Forum** : Discussions communautaires
+
+**Ce qui fonctionne quand même :**
+
+- ✅ Navigation sur toutes les pages### Authentification et Profil
+
+- ✅ Interface complète (Home, Offres, Roadmaps, Forum, etc.)
+
+- ✅ Animations et effets visuels- 🔐 **Connexion/Inscription** : Interface moderne avec choix du type de compte (Étudiant/Entreprise)- [API Endpoints](#api-endpoints)- 🎯 **Mentorat** : Connexion avec des mentors professionnels
+
+- ✅ Design responsive
+
+- 🔑 **2FA** : Page de vérification du code à deux facteurs
 
 ---
 
-### Profils Utilisateurs## 🛠️ Technologies
+- 📊 **Dashboard** : Tableau de bord personnalisé- ℹ️ **À propos** : Histoire et équipe de Forstek
 
-## 🎯 Démarrage
+### Mode 2️⃣ : Avec Backend Complet 🔥
 
-- ✅ Profil étudiant complet (bio, formation, compétences)
+- 👤 **Profil** : Gestion complète du profil (bio, formation, compétences, liens sociaux)
 
-### Développement
+**Pour utiliser toutes les fonctionnalités (auth, profils, upload) :**
 
-- ✅ Profil entreprise- **Next.js 16** (App Router + Turbopack)
+- ⚙️ **Paramètres** : Modification des informations personnelles et upload de CV## 🚀 Technologies- 📞 **Contact** : Formulaire de contact et informations
 
-```bash
-
-npm run dev- ✅ Modification en temps réel- **TypeScript**
-
-```
-
-- ✅ Upload de CV (PDF)- **Tailwind CSS v4**
-
-Le site sera accessible sur **http://localhost:3000**
-
-- ✅ Liens sociaux (LinkedIn, GitHub, Website)- **Lucide React** (Icônes)
-
-### Production
-
-- **Framer Motion** (Animations)
+#### Option A : Repo Complet (le plus simple)
 
 ```bash
 
-# Build### Interface- **Radix UI** (Composants accessibles)
+# Utiliser le repo qui contient frontend + backend
 
-npm run build
+git clone https://github.com/hazem02b/front-back-forstek.git### UI/UX
 
-- ✅ Design moderne avec animations
+cd front-back-forstek
 
-# Démarrer
+npm install- ✨ Design moderne avec animations Framer Motion
 
-npm start- ✅ Navigation conditionnelle selon authentification## 📁 Structure du Projet
+# Suivre les instructions de configuration backend
 
-```
+```- 🎨 Dégradés et effets glassmorphism### Frontend## 🚀 Installation Rapide
 
-- ✅ Dashboard personnalisé
 
----
 
-- ✅ Page paramètres unifiée```
+#### Option B : Backend Séparé- 📱 Responsive design (mobile-first)
 
-## 📁 Structure du projet
+1. Clonez [front-back-forstek](https://github.com/hazem02b/front-back-forstek) dans un autre dossier
 
-- ✅ Responsive designfront-end/
+2. Configurez et lancez le backend Flask (port 5000)- 🔔 Navigation conditionnelle selon l'authentification- **Next.js 14** - Framework React avec App Router
 
-```
+3. Lancez ce frontend (port 3000)
 
-front-end/├── app/                    # Pages (Next.js App Router)
+4. Tout fonctionne ! ✨- 🛡️ Protection des routes privées
 
-├── app/                          # Pages Next.js (App Router)
 
-│   ├── page.tsx                  # Page d'accueil## 📦 Installation│   ├── page.tsx           # Accueil
 
-│   ├── login/                    # Page de connexion
+---- **TypeScript** - Typage statique### 1️⃣ Cloner le repository
 
-│   ├── register/                 # Page d'inscription│   ├── login/             # Connexion
 
-│   ├── 2fa/                      # Vérification 2FA
 
-│   ├── dashboard/                # Dashboard utilisateur### Prérequis│   ├── register/          # Inscription
+## ✨ Fonctionnalités---
 
-│   ├── settings/                 # Paramètres & profil
 
-│   ├── offres/                   # Offres de stage- Node.js 18+ et npm│   ├── offres/            # Offres de stage
 
-│   ├── roadmaps/                 # Roadmaps d'apprentissage
+### 🎯 Pages Disponibles- **Tailwind CSS** - Styling moderne```bash
 
-│   ├── mentorship/               # Programme de mentorat- Python 3.10+│   ├── dashboard/         # Tableau de bord
+- 🏠 **Accueil** - Présentation moderne avec animations
 
-│   ├── forum/                    # Forum communautaire
+- 💼 **Offres de Stage** - Recherche et filtrage## 🚀 Technologies
 
-│   ├── about/                    # À propos- Git│   ├── profile/           # Profil
+- 🗺️ **Roadmaps** - Parcours d'apprentissage guidés
 
-│   └── contact/                  # Contact
+- 🎓 **Mentorat** - Connexion avec des mentors- **Lucide React** - Icônesgit clone https://github.com/hazem02b/front-end.git
 
-├── components/                   # Composants React réutilisables│   ├── forum/             # Forum
+- 💬 **Forum** - Discussions communautaires
 
-│   ├── Navbar.tsx                # Navigation principale
+- ℹ️ **À Propos** - Histoire et équipe- **Next.js 14** - Framework React avec App Router
 
-│   ├── ProtectedRoute.tsx        # HOC pour routes protégées### 1. Cloner le projet│   ├── mentorship/        # Mentorat
+- 📞 **Contact** - Formulaire de contact
 
-│   ├── CVUploader.tsx            # Upload de CV
+- **TypeScript** - Typage statique pour plus de sécuritécd front-end
 
-│   ├── ModernBackground.tsx      # Background animé│   ├── about/             # À propos
+### 🔐 Authentification (nécessite backend)
 
-│   ├── FloatingParticles.tsx     # Particules flottantes
+- Inscription (Étudiant/Entreprise)- **Tailwind CSS v4** - Framework CSS utility-first
 
-│   └── ui/                       # Composants UI (Button, Card, etc.)```bash│   └── contact/           # Contact
+- Connexion avec 2FA par email
 
-├── contexts/                     # Contextes React
+- Tokens JWT (expiration 24h)- **Lucide React** - Bibliothèque d'icônes modernes### Backend```
 
-│   └── AuthContext.tsx           # Gestion de l'authentificationgit clone https://github.com/hazem02b/front-back-forstek.git├── components/            # Composants réutilisables
+- Protection des routes privées
 
-├── lib/                          # Utilitaires
+- **Framer Motion** - Animations fluides
 
-│   └── api-config.ts             # Configuration de l'APIcd front-back-forstek│   ├── Navbar.tsx
+### 👤 Gestion de Profil (nécessite backend)
 
-├── public/                       # Assets statiques
+- Profil complet (bio, formation, compétences)- **Radix UI** - Composants accessibles- **Flask** - Framework Python léger
 
-├── styles/                       # Styles globaux```│   ├── ModernBackground.tsx
+- Upload de CV (PDF)
 
-├── .gitignore                    # Fichiers ignorés par Git
+- Liens sociaux (LinkedIn, GitHub, Website)
 
-├── package.json                  # Dépendances Node.js│   └── ui/                # Composants UI
+- Dashboard personnalisé
 
-├── tailwind.config.ts            # Configuration Tailwind
+---- **SQLAlchemy** - ORM pour la base de données### 2️⃣ Installer les dépendances
 
-├── tsconfig.json                 # Configuration TypeScript### 2. Installation Frontend└── public/                # Assets statiques
+### 🎨 UI/UX
 
-└── README.md                     # Ce fichier
+- Design moderne avec Tailwind CSS v4
 
-``````
+- Animations Framer Motion
+
+- Effets glassmorphism et dégradés## 📦 Installation- **SQLite** - Base de données```bash
+
+- Responsive (mobile, tablette, desktop)
+
+- Navigation conditionnelle selon authentification
+
+
+
+---### Prérequis- **JWT** - Authentification par tokensnpm install
+
+
+
+## 🛠️ Technologies- Node.js 18+ et npm
+
+
+
+### Frontend- Git- **Bcrypt** - Hashage des mots de passe```
+
+- **Next.js 14** - App Router + Turbopack
+
+- **TypeScript** - Typage statique
+
+- **Tailwind CSS v4** - Styling moderne
+
+- **Framer Motion** - Animations fluides### 1. Cloner le repository- **2FA** - Authentification à deux facteurs⚠️ **IMPORTANT** : Cette étape est OBLIGATOIRE après chaque clonage !
+
+- **Lucide React** - Icônes modernes
+
+- **Radix UI** - Composants accessibles
+
+
+
+### Backend (dans front-back-forstek)```bash
+
+- **Flask** - API REST
+
+- **SQLAlchemy** - ORMgit clone https://github.com/hazem02b/front-end.git
+
+- **SQLite** - Base de données
+
+- **JWT** - Authentificationcd front-end## ✨ Fonctionnalités### 3️⃣ Lancer le serveur
+
+- **Bcrypt** - Hashage des mots de passe
+
+- **Brevo SMTP** - Envoi d'emails 2FA```
 
 
 
 ---```bash
+
+
+
+## 📁 Structure du Projet### 2. Installer les dépendances
+
+
+
+```### Authentificationnpm run dev
+
+front-end/
+
+├── app/                    # Pages Next.js (App Router)```bash
+
+│   ├── page.tsx           # Accueil
+
+│   ├── login/             # Connexionnpm install- ✅ Inscription avec validation (email, mot de passe, type de compte)```
+
+│   ├── register/          # Inscription
+
+│   ├── 2fa/               # Vérification 2FA```
+
+│   ├── dashboard/         # Tableau de bord
+
+│   ├── settings/          # Paramètres & profil- ✅ Connexion avec authentification 2FA
+
+│   ├── offres/            # Offres de stage
+
+│   ├── roadmaps/          # Roadmaps> ⚠️ **Important** : Cette étape est essentielle ! Le dossier `node_modules` (~500 MB) n'est pas inclus dans Git et doit être généré localement.
+
+│   ├── mentorship/        # Mentorat
+
+│   ├── forum/             # Forum- ✅ Codes 2FA envoyés par email (Brevo SMTP)### 4️⃣ Ouvrir dans le navigateur
+
+│   ├── about/             # À propos
+
+│   └── contact/           # Contact### 3. Configurer l'API backend (optionnel)
+
+├── components/            # Composants réutilisables
+
+│   ├── Navbar.tsx- ✅ Tokens JWT avec expiration 24hVisitez : **http://localhost:3000**
+
+│   ├── ProtectedRoute.tsx
+
+│   ├── CVUploader.tsxSi vous avez un backend Flask, modifiez `lib/api-config.ts` :
+
+│   ├── ModernBackground.tsx
+
+│   └── ui/                # Composants UI- ✅ Protection des routes privées
+
+├── contexts/              # Contextes React
+
+│   └── AuthContext.tsx```typescript
+
+├── lib/                   # Utilitaires
+
+│   └── api-config.ts      # Config APIexport const API_BASE_URL = 'http://localhost:5000'; // URL de votre backend- ✅ Gestion de session avec localStorage
+
+├── public/                # Assets statiques
+
+├── .gitignore```
+
+├── package.json
+
+├── tailwind.config.ts
+
+├── tsconfig.json
+
+└── README.md---
+
+```
+
+### Profils Utilisateurs## 🛠️ Technologies
+
+---
+
+## 🎯 Démarrage
+
+## 🐛 Problèmes Courants
+
+- ✅ Profil étudiant complet (bio, formation, compétences)
+
+### ❌ "Failed to fetch" lors de la connexion
+
+### Développement
+
+**Cause :** Vous utilisez le frontend seul, sans backend.
+
+- ✅ Profil entreprise- **Next.js 16** (App Router + Turbopack)
+
+**Solutions :**
+
+1. **Mode démo** : Ignorez l'erreur, naviguez sur les autres pages pour voir l'interface```bash
+
+2. **Mode complet** : Utilisez [front-back-forstek](https://github.com/hazem02b/front-back-forstek) qui inclut le backend
+
+npm run dev- ✅ Modification en temps réel- **TypeScript**
+
+---
+
+```
+
+### ❌ "Module not found" après clonage
+
+- ✅ Upload de CV (PDF)- **Tailwind CSS v4**
+
+**Cause :** Dépendances non installées.
+
+Le site sera accessible sur **http://localhost:3000**
+
+**Solution :**
+
+```bash- ✅ Liens sociaux (LinkedIn, GitHub, Website)- **Lucide React** (Icônes)
+
+rm -rf node_modules package-lock.json
+
+npm install### Production
+
+```
+
+- **Framer Motion** (Animations)
+
+---
+
+```bash
+
+### ❌ Port 3000 déjà occupé
+
+# Build### Interface- **Radix UI** (Composants accessibles)
+
+**Cause :** Autre processus utilise le port.
+
+npm run build
+
+**Solution :** Next.js utilisera automatiquement un port libre (3001, 3002...)
+
+- ✅ Design moderne avec animations
+
+---
+
+# Démarrer
+
+### ❌ Le serveur ne démarre pas
+
+npm start- ✅ Navigation conditionnelle selon authentification## 📁 Structure du Projet
+
+**Solution 1 :** Vérifier Node.js
+
+```bash```
+
+node --version  # Doit être >= 18.0.0
+
+```- ✅ Dashboard personnalisé
+
+
+
+**Solution 2 :** Réinstaller les dépendances---
+
+```bash
+
+rm -rf node_modules package-lock.json .next- ✅ Page paramètres unifiée```
+
+npm install
+
+npm run dev## 📁 Structure du projet
+
+```
+
+- ✅ Responsive designfront-end/
+
+---
+
+```
+
+## 📝 Commandes Disponibles
+
+front-end/├── app/                    # Pages (Next.js App Router)
+
+| Commande | Description |
+
+|----------|-------------|├── app/                          # Pages Next.js (App Router)
+
+| `npm run dev` | Serveur de développement (port 3000) |
+
+| `npm run build` | Build de production |│   ├── page.tsx                  # Page d'accueil## 📦 Installation│   ├── page.tsx           # Accueil
+
+| `npm start` | Démarrer en production |
+
+| `npm run lint` | Vérifier le code (ESLint) |│   ├── login/                    # Page de connexion
+
+
+
+---│   ├── register/                 # Page d'inscription│   ├── login/             # Connexion
+
+
+
+## 🔗 Liens Utiles│   ├── 2fa/                      # Vérification 2FA
+
+
+
+- 🔗 **Repo complet** : [front-back-forstek](https://github.com/hazem02b/front-back-forstek) (Frontend + Backend)│   ├── dashboard/                # Dashboard utilisateur### Prérequis│   ├── register/          # Inscription
+
+- 🔗 **Repo frontend** : [front-end](https://github.com/hazem02b/front-end) (Frontend seul - ce repo)
+
+- 👨‍💻 **Développeur** : [@hazem02b](https://github.com/hazem02b)│   ├── settings/                 # Paramètres & profil
+
+- 📧 **Email** : hazem@forstek.tn
+
+│   ├── offres/                   # Offres de stage- Node.js 18+ et npm│   ├── offres/            # Offres de stage
+
+---
+
+│   ├── roadmaps/                 # Roadmaps d'apprentissage
+
+## 🎯 Pour Aller Plus Loin
+
+│   ├── mentorship/               # Programme de mentorat- Python 3.10+│   ├── dashboard/         # Tableau de bord
+
+### Ajouter des Données Mockées (Optionnel)
+
+│   ├── forum/                    # Forum communautaire
+
+Pour tester l'authentification sans backend, vous pouvez modifier `contexts/AuthContext.tsx` pour utiliser des données simulées :
+
+│   ├── about/                    # À propos- Git│   ├── profile/           # Profil
+
+```typescript
+
+// Mode démo : simulation de connexion│   └── contact/                  # Contact
+
+const mockLogin = async (email: string, password: string) => {
+
+  // Simuler un délai réseau├── components/                   # Composants React réutilisables│   ├── forum/             # Forum
+
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  │   ├── Navbar.tsx                # Navigation principale
+
+  // Créer un utilisateur fictif
+
+  const mockUser = {│   ├── ProtectedRoute.tsx        # HOC pour routes protégées### 1. Cloner le projet│   ├── mentorship/        # Mentorat
+
+    email,
+
+    name: "Utilisateur Démo",│   ├── CVUploader.tsx            # Upload de CV
+
+    type: "STUDENT"
+
+  };│   ├── ModernBackground.tsx      # Background animé│   ├── about/             # À propos
+
+  
+
+  // Créer un faux token│   ├── FloatingParticles.tsx     # Particules flottantes
+
+  const mockToken = "demo-token-" + Date.now();
+
+  │   └── ui/                       # Composants UI (Button, Card, etc.)```bash│   └── contact/           # Contact
+
+  // Sauvegarder localement
+
+  localStorage.setItem('token', mockToken);├── contexts/                     # Contextes React
+
+  localStorage.setItem('user', JSON.stringify(mockUser));
+
+  │   └── AuthContext.tsx           # Gestion de l'authentificationgit clone https://github.com/hazem02b/front-back-forstek.git├── components/            # Composants réutilisables
+
+  setUser(mockUser);
+
+};├── lib/                          # Utilitaires
+
+```
+
+│   └── api-config.ts             # Configuration de l'APIcd front-back-forstek│   ├── Navbar.tsx
+
+---
+
+├── public/                       # Assets statiques
+
+## 📄 Licence
+
+├── styles/                       # Styles globaux```│   ├── ModernBackground.tsx
+
+MIT License - Voir le fichier LICENSE pour plus de détails.
+
+├── .gitignore                    # Fichiers ignorés par Git
+
+---
+
+├── package.json                  # Dépendances Node.js│   └── ui/                # Composants UI
+
+## 🌟 Contribuer
+
+├── tailwind.config.ts            # Configuration Tailwind
+
+1. Fork le projet
+
+2. Créez une branche (`git checkout -b feature/AmazingFeature`)├── tsconfig.json                 # Configuration TypeScript### 2. Installation Frontend└── public/                # Assets statiques
+
+3. Committez (`git commit -m 'Add AmazingFeature'`)
+
+4. Push (`git push origin feature/AmazingFeature`)└── README.md                     # Ce fichier
+
+5. Ouvrez une Pull Request
+
+``````
+
+---
+
+
+
+**⭐ Si ce projet vous plaît, donnez-lui une étoile sur GitHub !**
+
+---```bash
+
+**💡 Astuce :** Pour une expérience complète avec authentification fonctionnelle, utilisez [front-back-forstek](https://github.com/hazem02b/front-back-forstek).
 
 
 
