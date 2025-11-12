@@ -2,19 +2,21 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { ArrowRight, Mail, Lock, Eye, EyeOff, Github, Chrome } from 'lucide-react';
+import { ArrowRight, Mail, Lock, Eye, EyeOff, Github, Chrome, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ModernBackground from '@/components/ModernBackground';
 import FloatingParticles from '@/components/FloatingParticles';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { API_ENDPOINTS } from '@/lib/api-config';
+import { DEMO_MODE, checkBackendAvailable } from '@/lib/demo-config';
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isDemoMode, setIsDemoMode] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -24,6 +26,15 @@ export default function LoginPage() {
   const { login } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  // Vérifier si le backend est disponible
+  useEffect(() => {
+    const checkMode = async () => {
+      const backendAvailable = await checkBackendAvailable();
+      setIsDemoMode(!backendAvailable && DEMO_MODE.enabled);
+    };
+    checkMode();
+  }, []);
 
   // Vérifier si on vient de s'inscrire
   useEffect(() => {
@@ -44,7 +55,20 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      // Appel API backend pour connexion
+      // MODE DÉMO : Connexion directe sans API
+      if (isDemoMode) {
+        await new Promise(resolve => setTimeout(resolve, 800)); // Simuler délai
+        const success = await login(formData.email || DEMO_MODE.demoUser.email, formData.password || 'demo');
+        if (success) {
+          setSuccess('🎭 Connexion en mode démo réussie !');
+          setTimeout(() => router.push('/dashboard'), 1000);
+        } else {
+          setError('Erreur de connexion en mode démo');
+        }
+        return;
+      }
+
+      // MODE NORMAL : Appel API backend pour connexion
       const response = await fetch(API_ENDPOINTS.login, {
         method: 'POST',
         headers: {
@@ -69,7 +93,14 @@ export default function LoginPage() {
       // Redirection vers 2FA
       router.push('/2fa');
     } catch (err: any) {
-      setError(err.message || 'Une erreur est survenue');
+      // En cas d'erreur réseau, basculer en mode démo
+      if (err.message.includes('fetch') || err.message.includes('Failed to fetch')) {
+        setIsDemoMode(true);
+        setError('');
+        setSuccess('🎭 Backend non disponible. Mode démo activé ! Cliquez sur "Se connecter" pour continuer.');
+      } else {
+        setError(err.message || 'Une erreur est survenue');
+      }
     } finally {
       setLoading(false);
     }

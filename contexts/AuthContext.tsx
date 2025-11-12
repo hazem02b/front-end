@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { API_ENDPOINTS } from '@/lib/api-config';
+import { DEMO_MODE, checkBackendAvailable } from '@/lib/demo-config';
 
 interface User {
   id?: number;
@@ -26,10 +27,30 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isDemoMode, setIsDemoMode] = useState(false);
 
   // Charger l'utilisateur depuis localStorage au démarrage (sans appel API)
   useEffect(() => {
-    const loadUser = () => {
+    const loadUser = async () => {
+      // Vérifier si le backend est disponible
+      const backendAvailable = await checkBackendAvailable();
+      
+      if (!backendAvailable && DEMO_MODE.enabled) {
+        console.log('🎭 MODE DÉMO ACTIVÉ (backend non disponible)');
+        setIsDemoMode(true);
+        
+        // Charger l'utilisateur démo si pas déjà authentifié
+        const storedDemoAuth = localStorage.getItem('demoAuthenticated');
+        if (storedDemoAuth === 'true') {
+          setUser(DEMO_MODE.demoUser);
+          setIsAuthenticated(true);
+          console.log('✅ Utilisateur démo chargé:', DEMO_MODE.demoUser.email);
+        }
+        return;
+      }
+      
+      // Mode normal avec backend
+      setIsDemoMode(false);
       const token = localStorage.getItem('accessToken');
       const storedUser = localStorage.getItem('user');
       const isAuth = localStorage.getItem('isAuthenticated');
@@ -103,6 +124,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
+      // MODE DÉMO
+      if (isDemoMode && DEMO_MODE.enabled) {
+        console.log('🎭 Connexion en mode démo');
+        // Simuler un délai réseau
+        await new Promise(resolve => setTimeout(resolve, 800));
+        
+        setUser(DEMO_MODE.demoUser);
+        setIsAuthenticated(true);
+        localStorage.setItem('demoAuthenticated', 'true');
+        return true;
+      }
+      
       // Note: Le login avec 2FA est géré ailleurs
       // Cette fonction est juste pour la compatibilité
       return false;
@@ -119,6 +152,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     type: 'student' | 'company'
   ): Promise<boolean> => {
     try {
+      // MODE DÉMO
+      if (isDemoMode && DEMO_MODE.enabled) {
+        console.log('🎭 Inscription en mode démo');
+        // Simuler un délai réseau
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        const demoUser = {
+          ...DEMO_MODE.demoUser,
+          email,
+          name,
+          type: type.toUpperCase() as 'STUDENT' | 'COMPANY',
+        };
+        
+        setUser(demoUser);
+        setIsAuthenticated(true);
+        localStorage.setItem('demoAuthenticated', 'true');
+        return true;
+      }
+      
       // Note: Le register est géré ailleurs (avec 2FA)
       // Cette fonction est juste pour la compatibilité
       return false;
@@ -134,6 +186,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.removeItem('user');
     localStorage.removeItem('accessToken');
     localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('demoAuthenticated');
   };
 
   const updateProfile = async (data: Partial<User>): Promise<boolean> => {
