@@ -47,19 +47,6 @@ next-env.d.ts
 # prisma
 /app/generated/prisma
 
-# Python backend
-backend-flask/__pycache__/
-backend-flask/*.pyc
-backend-flask/.venv/
-backend-flask/venv/
-backend-flask/instance/
-backend-flask/uploads/
-
-# Database
-*.db
-*.sqlite
-*.sqlite3
-
 # Uploads
 public/uploads/*
 !public/uploads/.gitkeep
