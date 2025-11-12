@@ -34,46 +34,52 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const loadUser = async () => {
       console.log('🔄 AuthContext: Démarrage loadUser...');
       
-      // Vérifier si le backend est disponible
+      // D'ABORD : Vérifier localStorage IMMÉDIATEMENT (mode démo)
+      const storedDemoAuth = localStorage.getItem('demoAuthenticated');
+      const storedUser = localStorage.getItem('user');
+      const storedIsAuth = localStorage.getItem('isAuthenticated');
+      
+      console.log('📦 localStorage initial:', {
+        demoAuthenticated: storedDemoAuth,
+        isAuthenticated: storedIsAuth,
+        hasUser: !!storedUser
+      });
+      
+      // Si mode démo déjà actif, charger IMMÉDIATEMENT
+      if (storedDemoAuth === 'true' && storedUser && storedIsAuth === 'true') {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+        setIsAuthenticated(true);
+        setIsDemoMode(true);
+        console.log('✅ Utilisateur démo chargé IMMÉDIATEMENT:', parsedUser.email);
+        return; // Ne pas faire de vérification backend
+      }
+      
+      // Vérifier si le backend est disponible (pour nouveau login)
       const backendAvailable = await checkBackendAvailable();
       console.log('🌐 Backend disponible:', backendAvailable);
       
       if (!backendAvailable && DEMO_MODE.enabled) {
         console.log('🎭 MODE DÉMO ACTIVÉ (backend non disponible)');
         setIsDemoMode(true);
-        
-        // Charger l'utilisateur démo si pas déjà authentifié
-        const storedDemoAuth = localStorage.getItem('demoAuthenticated');
-        console.log('📦 demoAuthenticated dans localStorage:', storedDemoAuth);
-        
-        if (storedDemoAuth === 'true') {
-          const storedUser = localStorage.getItem('user');
-          const parsedUser = storedUser ? JSON.parse(storedUser) : DEMO_MODE.demoUser;
-          
-          setUser(parsedUser);
-          setIsAuthenticated(true);
-          console.log('✅ Utilisateur démo chargé:', parsedUser.email);
-        } else {
-          console.log('⚠️ Pas d\'utilisateur démo authentifié');
-        }
         return;
       }
       
       // Mode normal avec backend
       setIsDemoMode(false);
       const token = localStorage.getItem('accessToken');
-      const storedUser = localStorage.getItem('user');
+      const normalUser = localStorage.getItem('user');
       const isAuth = localStorage.getItem('isAuthenticated');
       
-      console.log('🔍 Chargement AuthContext:', { 
+      console.log('🔍 Chargement AuthContext (mode normal):', { 
         hasToken: !!token, 
-        hasUser: !!storedUser, 
+        hasUser: !!normalUser, 
         isAuth 
       });
       
-      if (token && storedUser && isAuth === 'true') {
+      if (token && normalUser && isAuth === 'true') {
         try {
-          const parsedUser = JSON.parse(storedUser);
+          const parsedUser = JSON.parse(normalUser);
           console.log('✅ Utilisateur chargé depuis localStorage:', parsedUser.email);
           setUser(parsedUser);
           setIsAuthenticated(true);
