@@ -51,6 +51,10 @@ next-env.d.ts
 public/uploads/*
 !public/uploads/.gitkeep
 
+# Backend Flask (ce repo est frontend-only)
+backend-flask/
+prisma/dev.db
+
 # Documentation temporaire (fichiers de debug seulement)
 BACKEND_*.md
 CORRECTION_*.md
